@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tress — Writing Workpad</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1a1208;
+    --parchment: #f5eedf;
+    --parchment2:#ede4d0;
+    --cream:     #faf6ed;
+    --gold:      #b8860b;
+    --gold-lt:   #d4a017;
+    --rust:      #8b3a2a;
+    --lavender:  #e8e4f3;
+    --lavender2: #d8d2f0;
+    --sage:      #d4e8d4;
+    --progress:  #7c9e7c;
+    --border:    #c9b99a;
+    --shadow:    rgba(26,18,8,0.12);
+    --font-display: 'IM Fell English', serif;
+    --font-body:    'Cormorant Garamond', serif;
+    --font-ui:      'Jost', sans-serif;
+  }
+
+  /* Color annotation palette */
+  --col-revisit:     #c0392b;
+  --col-final:       #1a6b2a;
+  --col-missing:     #7d4a00;
+  --col-consistency: #1a3d8b;
+  --col-placeholder: #5a1a7a;
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 18px;
+  }
+
+  /* ── TOP BAR ── */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--ink);
+    color: var(--parchment);
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 24px;
+    height: 52px;
+    border-bottom: 2px solid var(--gold);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  #topbar .title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--gold-lt);
+    margin-right: auto;
+    letter-spacing: 0.02em;
+  }
+  #topbar .title span { font-style: italic; }
+  #save-status {
+    opacity: 0.7;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  #save-status.saved { color: #8de08d; opacity: 1; }
+  #save-status.saving { color: var(--gold-lt); opacity: 1; }
+  #save-status.error { color: #ff8080; opacity: 1; }
+
+  .topbtn {
+    background: transparent;
+    border: 1px solid rgba(184,134,11,0.5);
+    color: var(--parchment);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .topbtn:hover { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+  .topbtn.accent { background: var(--rust); border-color: var(--rust); }
+  .topbtn.accent:hover { background: #a8452f; }
+  .topbtn.green { background: #2a6b3a; border-color: #3a8b4a; }
+  .topbtn.green:hover { background: #3a8b4a; }
+
+  /* ── MAIN NAV TABS ── */
+  #main-wrap { padding-top: 52px; min-height: 100vh; display: flex; flex-direction: column; }
+
+  #nav-tabs {
+    display: flex;
+    background: var(--parchment2);
+    border-bottom: 2px solid var(--border);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    position: sticky; top: 52px; z-index: 90;
+    flex-wrap: wrap;
+  }
+  .nav-tab {
+    padding: 12px 22px;
+    cursor: pointer;
+    border-right: 1px solid var(--border);
+    transition: background 0.2s;
+    color: #6b5a3e;
+    user-select: none;
+  }
+  .nav-tab:hover { background: var(--parchment); }
+  .nav-tab.active {
+    background: var(--parchment);
+    color: var(--ink);
+    font-weight: 500;
+    border-bottom: 3px solid var(--gold);
+    margin-bottom: -2px;
+  }
+
+  /* ── PANELS ── */
+  .panel { display: none; flex: 1; }
+  .panel.active { display: block; }
+
+  /* ── WRITING PANEL ── */
+  #writing-panel { padding: 28px 32px 60px; }
+
+  .panel-header {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .panel-header h2 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--rust);
+    font-style: italic;
+  }
+
+  /* add chapter */
+  #add-chapter-bar {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  #add-chapter-bar input {
+    flex: 1; min-width: 180px;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    font-family: var(--font-body);
+    font-size: 16px;
+    padding: 7px 12px;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+  #add-chapter-bar input:focus { outline: 2px solid var(--gold); }
+  .small-btn {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    background: var(--ink);
+    color: var(--parchment);
+    border: none; border-radius: 3px; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .small-btn:hover { background: var(--rust); }
+  .small-btn.danger { background: #8b3a2a; }
+  .small-btn.danger:hover { background: #6e2e20; }
+
+  /* ── CHAPTER CARD ── */
+  .chapter-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px var(--shadow);
+    overflow: hidden;
+  }
+  .chapter-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    background: var(--parchment2);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .chapter-header:hover { background: #e4d9c6; }
+  .chapter-title-wrap { flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .chapter-num {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .chapter-name-input {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-style: italic;
+    border: none; background: transparent;
+    color: var(--ink);
+    flex: 1; min-width: 120px;
+    cursor: text;
+  }
+  .chapter-name-input:focus { outline: 2px solid var(--gold); border-radius: 2px; background: #fff8ee; }
+  .chapter-wc {
+    font-family: var(--font-ui); font-size: 11px;
+    color: #8a7a60; white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+  .chapter-toggle { font-size: 18px; color: var(--gold); transition: transform 0.25s; user-select: none; }
+  .chapter-card.collapsed .chapter-toggle { transform: rotate(-90deg); }
+
+  .chapter-body { display: block; }
+  .chapter-card.collapsed .chapter-body { display: none; }
+
+  /* metadata row */
+  .chapter-meta {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    padding: 10px 16px 0;
+  }
+  .meta-field {
+    display: flex; flex-direction: column; gap: 3px;
+    font-family: var(--font-ui); font-size: 12px;
+    color: #7a6a52;
+    letter-spacing: 0.04em;
+    flex: 1; min-width: 130px;
+  }
+  .meta-field label { text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em; color: var(--gold); }
+  .meta-field input, .meta-field select {
+    border: 1px solid var(--border);
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: var(--font-body); font-size: 15px;
+    padding: 4px 8px; border-radius: 3px;
+  }
+  .meta-field input:focus, .meta-field select:focus { outline: 2px solid var(--gold); }
+
+  /* inner tabs */
+  .inner-tabs {
+    display: flex; margin: 12px 16px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-ui); font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .inner-tab {
+    padding: 7px 18px;
+    cursor: pointer; border-radius: 3px 3px 0 0;
+    color: #7a6a52;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .inner-tab:hover { background: var(--parchment); }
+  .inner-tab.active {
+    background: var(--cream);
+    color: var(--ink);
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-bottom: 1px solid var(--cream);
+    margin-bottom: -1px;
+  }
+  .inner-tab-content { display: none; padding: 12px 16px 16px; }
+  .inner-tab-content.active { display: block; }
+
+  /* ── WRITING TOOLBAR ── */
+  .writing-toolbar {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    padding: 8px 0 6px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .toolbar-label {
+    font-family: var(--font-ui); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: #9a8a70; margin-right: 4px; white-space: nowrap;
+  }
+  .toolbar-sep { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+
+  /* Color buttons */
+  .col-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 9px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: var(--font-ui); font-size: 11px;
+    letter-spacing: 0.03em;
+    transition: all 0.15s;
+    white-space: nowrap;
+    background: transparent;
+  }
+  .col-btn .swatch {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .col-btn:hover { border-color: var(--border); background: var(--parchment); }
+  .col-btn.active-color { border-color: currentColor; font-weight: 500; }
+
+  .col-btn-revisit     { color: #c0392b; }
+  .col-btn-final       { color: #1a6b2a; }
+  .col-btn-missing     { color: #7d4a00; }
+  .col-btn-consistency { color: #1a3d8b; }
+  .col-btn-placeholder { color: #5a1a7a; }
+  .col-btn-reset       { color: #555; }
+
+  /* Symbol buttons */
+  .sym-btn {
+    padding: 3px 7px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--parchment2);
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s;
+    title: attr(data-title);
+  }
+  .sym-btn:hover { background: var(--gold-lt); }
+
+  /* textareas */
+  .draft-area {
+    width: 100%;
+    min-height: 220px;
+    resize: vertical;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: #fdfaf3;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.85;
+    padding: 14px 16px;
+    color: var(--ink);
+    transition: outline 0.15s;
+  }
+  .draft-area:focus { outline: 2px solid var(--gold); }
+
+  .ideas-area {
+    background: #f3f0fb;
+    border-color: var(--lavender2);
+  }
+  .ideas-area:focus { outline: 2px solid var(--lavender2); }
+
+  .area-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 6px;
+    font-family: var(--font-ui); font-size: 11px;
+    color: #9a8a70; letter-spacing: 0.04em;
+  }
+  .area-footer .ts { font-style: italic; }
+
+  .chapter-actions {
+    display: flex; gap: 8px; padding: 0 16px 14px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  /* Color legend */
+  .color-legend {
+    background: var(--parchment2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    font-family: var(--font-ui); font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .color-legend .leg-title {
+    color: var(--gold); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    margin-right: 4px;
+  }
+  .leg-item { display: flex; align-items: center; gap: 5px; }
+  .leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── PROGRESS PANEL ── */
+  #progress-panel { padding: 28px 32px 60px; }
+  .progress-summary {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px; margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 6px var(--shadow);
+  }
+  .stat-card .label {
+    font-family: var(--font-ui); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .stat-card .value {
+    font-family: var(--font-display); font-size: 32px;
+    font-style: italic; color: var(--ink);
+  }
+  .stat-card .sub {
+    font-family: var(--font-ui); font-size: 11px;
+    color: #9a8a70; margin-top: 2px;
+  }
+  .progress-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+  .progress-table th, .progress-table td {
+    text-align: left; padding: 9px 12px;
+    font-family: var(--font-ui); font-size: 13px;
+  }
+  .progress-table th {
+    background: var(--parchment2);
+    border-bottom: 2px solid var(--border);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    font-size: 11px; color: var(--gold);
+  }
+  .progress-table tr:nth-child(even) td { background: var(--cream); }
+  .progress-table td { border-bottom: 1px solid var(--border); }
+  .pbar-wrap { width: 100%; background: var(--parchment2); border-radius: 10px; height: 10px; overflow: hidden; }
+  .pbar { height: 100%; background: var(--progress); border-radius: 10px; transition: width 0.4s; }
+  .pbar.over { background: var(--gold); }
+
+  .session-log { }
+  .session-log h3 {
+    font-family: var(--font-display); font-size: 20px; font-style: italic;
+    color: var(--rust); margin-bottom: 12px;
+  }
+  .session-item {
+    display: flex; gap: 14px; align-items: baseline;
+    font-family: var(--font-ui); font-size: 13px;
+    padding: 7px 0; border-bottom: 1px solid var(--border);
+    color: var(--ink);
+  }
+  .session-date { color: var(--gold); white-space: nowrap; min-width: 110px; }
+  .session-chapter { color: var(--rust); font-style: italic; flex: 1; }
+  .session-words { color: #6b5a3e; white-space: nowrap; }
+  .empty-log { font-family: var(--font-ui); font-size: 13px; color: #9a8a70; font-style: italic; padding: 12px 0; }
+
+  /* ── INDEX PANEL ── */
+  #index-panel { padding: 28px 32px 60px; max-width: 860px; }
+  #index-panel .panel-header h2 { font-family: var(--font-display); font-size: 26px; font-style: italic; color: var(--rust); }
+  .index-book-title {
+    font-family: var(--font-display); font-size: 36px; font-style: italic;
+    color: var(--ink); text-align: center; margin-bottom: 6px;
+  }
+  .index-subtitle {
+    font-family: var(--font-ui); font-size: 13px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--gold); text-align: center;
+    margin-bottom: 32px;
+  }
+  .index-table {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--font-body);
+  }
+  .index-table tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .index-table tr:hover { background: var(--parchment2); }
+  .index-table td {
+    padding: 11px 14px; vertical-align: middle;
+  }
+  .idx-num {
+    font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); width: 80px;
+  }
+  .idx-name {
+    font-family: var(--font-display); font-size: 19px; font-style: italic;
+    color: var(--ink);
+  }
+  .idx-pov { font-family: var(--font-ui); font-size: 12px; color: #8a7a60; width: 120px; }
+  .idx-wc { font-family: var(--font-ui); font-size: 12px; color: #9a8a70; text-align: right; width: 80px; }
+  .idx-status {
+    font-family: var(--font-ui); font-size: 11px;
+    padding: 2px 8px; border-radius: 10px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .idx-status.drafting    { background: #e8eef8; color: #3a4a7a; }
+  .idx-status.revising    { background: #f8f0e0; color: #7a5020; }
+  .idx-status.complete    { background: #e8f8e8; color: #2a6a2a; }
+  .idx-status.outline     { background: var(--parchment2); color: #6a6a6a; }
+  .index-empty {
+    font-family: var(--font-body); font-size: 16px; color: #9a8a70;
+    font-style: italic; text-align: center; padding: 40px;
+  }
+
+  /* ── GITHUB PANEL ── */
+  #github-panel { padding: 28px 32px 60px; max-width: 820px; }
+  #github-panel h2 {
+    font-family: var(--font-display); font-size: 28px; font-style: italic;
+    color: var(--rust); margin-bottom: 6px;
+  }
+  #github-panel .intro {
+    font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+    color: #4a3a28; margin-bottom: 28px;
+    border-left: 3px solid var(--gold); padding-left: 16px;
+  }
+  .gh-section {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px var(--shadow);
+  }
+  .gh-section h3 {
+    font-family: var(--font-display); font-size: 20px; font-style: italic;
+    color: var(--ink); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .gh-section h3 .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--gold); color: var(--ink);
+    font-family: var(--font-ui); font-size: 13px; font-style: normal; font-weight: 600;
+    border-radius: 50%; flex-shrink: 0;
+  }
+  .gh-section p, .gh-section li {
+    font-family: var(--font-body); font-size: 16px; line-height: 1.75;
+    color: #3a2e1e; margin-bottom: 8px;
+  }
+  .gh-section ul, .gh-section ol { padding-left: 20px; }
+  .gh-section li { margin-bottom: 6px; }
+  code {
+    font-family: 'Courier New', monospace;
+    background: var(--parchment2);
+    border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 3px;
+    font-size: 14px; color: var(--rust);
+  }
+  .code-block {
+    background: #1a1208;
+    color: #d4a017;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin: 8px 0;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.6;
+  }
+  .tip-box {
+    background: var(--sage);
+    border-left: 4px solid var(--progress);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-family: var(--font-body); font-size: 15px; line-height: 1.7;
+    margin: 10px 0;
+    color: #2a3e2a;
+  }
+  .warn-box {
+    background: #f9ede8;
+    border-left: 4px solid var(--rust);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-family: var(--font-body); font-size: 15px; line-height: 1.7;
+    margin: 10px 0;
+    color: #5a2a1a;
+  }
+  .gh-url {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: var(--rust);
+    background: var(--parchment2);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    display: inline-block;
+    margin: 4px 0;
+    word-break: break-all;
+  }
+
+  /* ── GITHUB SYNC PANEL ── */
+  #gitsync-panel { padding: 28px 32px 60px; max-width: 700px; }
+  #gitsync-panel h2 {
+    font-family: var(--font-display); font-size: 28px; font-style: italic;
+    color: var(--rust); margin-bottom: 6px;
+  }
+  .gitsync-intro {
+    font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+    color: #4a3a28; margin-bottom: 24px;
+    border-left: 3px solid var(--gold); padding-left: 16px;
+  }
+  .gitsync-form {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 6px var(--shadow);
+    margin-bottom: 20px;
+  }
+  .gitsync-form h3 {
+    font-family: var(--font-display); font-size: 20px; font-style: italic;
+    color: var(--ink); margin-bottom: 16px;
+  }
+  .form-row {
+    display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px;
+  }
+  .form-row label {
+    font-family: var(--font-ui); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--gold);
+  }
+  .form-row input, .form-row textarea {
+    border: 1px solid var(--border);
+    background: var(--parchment);
+    font-family: var(--font-body); font-size: 16px;
+    padding: 8px 12px; border-radius: 3px; color: var(--ink);
+    width: 100%;
+  }
+  .form-row input:focus, .form-row textarea:focus { outline: 2px solid var(--gold); }
+  .form-row input[type="password"] { font-family: monospace; letter-spacing: 0.1em; }
+  .form-row .hint {
+    font-family: var(--font-ui); font-size: 11px; color: #9a8a70;
+    margin-top: 2px; font-style: italic;
+  }
+  .sync-btn {
+    font-family: var(--font-ui); font-size: 13px; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 28px;
+    background: #1a4a2a; color: #d4e8d4;
+    border: none; border-radius: 3px; cursor: pointer;
+    transition: background 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .sync-btn:hover { background: #2a6a3a; }
+  .sync-btn:disabled { background: #888; cursor: not-allowed; }
+  #sync-log {
+    background: #1a1208;
+    color: #d4a017;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    padding: 14px 16px;
+    border-radius: 4px;
+    min-height: 60px;
+    margin-top: 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+  }
+  .sync-success { color: #8de08d !important; }
+  .sync-error { color: #ff8080 !important; }
+
+  /* ── MODAL (PDF) ── */
+  #pdf-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.6);
+    align-items: center; justify-content: center;
+  }
+  #pdf-modal.open { display: flex; }
+  #pdf-modal-box {
+    background: var(--cream);
+    border: 2px solid var(--gold);
+    border-radius: 6px;
+    padding: 28px 32px;
+    max-width: 480px; width: 94%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    text-align: center;
+  }
+  #pdf-modal-box h3 { font-family: var(--font-display); font-size: 22px; font-style: italic; color: var(--rust); margin-bottom: 10px; }
+  #pdf-modal-box p { font-family: var(--font-body); font-size: 16px; line-height: 1.7; color: var(--ink); margin-bottom: 18px; }
+  #pdf-modal-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .modal-btn {
+    font-family: var(--font-ui); font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 9px 22px; border-radius: 3px; cursor: pointer; border: none; transition: background 0.2s;
+  }
+  .modal-btn.primary { background: var(--ink); color: var(--parchment); }
+  .modal-btn.primary:hover { background: var(--rust); }
+  .modal-btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--ink); }
+  .modal-btn.secondary:hover { background: var(--parchment2); }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    #topbar, #nav-tabs, #pdf-modal { display: none !important; }
+    #main-wrap { padding-top: 0 !important; }
+    .panel { display: none !important; }
+    #print-area { display: block !important; }
+  }
+  #print-area {
+    display: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12pt;
+    line-height: 1.9;
+    color: #000;
+    padding: 40px 60px;
+  }
+  #print-area h1 { font-family: 'IM Fell English', serif; font-size: 22pt; margin-bottom: 6px; }
+  #print-area .print-index { margin-bottom: 36px; page-break-after: always; }
+  #print-area .print-index h2 { font-family: 'IM Fell English', serif; font-size: 18pt; font-style: italic; margin-bottom: 14px; }
+  #print-area .print-index table { width: 100%; border-collapse: collapse; font-family: 'Cormorant Garamond', serif; font-size: 12pt; }
+  #print-area .print-index td { padding: 6px 10px; border-bottom: 1px solid #ccc; }
+  #print-area .print-meta { font-size: 10pt; color: #555; margin-bottom: 18px; border-bottom: 1px solid #aaa; padding-bottom: 8px; font-style: italic; }
+  #print-area .print-chapter { margin-bottom: 36px; }
+  #print-area .print-chapter h2 { font-family: 'IM Fell English', serif; font-size: 16pt; font-style: italic; margin-bottom: 4px; page-break-after: avoid; }
+  #print-area .print-chapter .ch-meta { font-size: 9pt; color: #666; margin-bottom: 10px; font-style: italic; }
+  #print-area .print-chapter p { text-indent: 1.5em; margin-bottom: 6px; }
+  #print-area .print-chapter p:first-of-type { text-indent: 0; }
+  /* Color spans in print */
+  #print-area .cr { color: #c0392b; }
+  #print-area .cf { color: #1a6b2a; }
+  #print-area .cm { color: #7d4a00; }
+  #print-area .cc { color: #1a3d8b; }
+  #print-area .cp { color: #5a1a7a; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--parchment2); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* Tooltip */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute; bottom: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink); color: var(--parchment);
+    font-family: var(--font-ui); font-size: 11px;
+    padding: 4px 8px; border-radius: 3px;
+    white-space: nowrap; pointer-events: none; z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="title">✦ <span>Tress</span> — Writing Workpad</div>
+  <span id="save-status">Not yet saved</span>
+  <button class="topbtn green" onclick="quickCommit()" data-tip="Save & commit to GitHub">☁ Save to GitHub</button>
+  <button class="topbtn" onclick="refreshProgress(); showPanel('progress')">📊 Progress</button>
+  <button class="topbtn accent" onclick="openPdfModal()">⬇ Download PDF</button>
+</div>
+
+<!-- MAIN WRAP -->
+<div id="main-wrap">
+  <!-- NAV TABS -->
+  <div id="nav-tabs">
+    <div class="nav-tab active" onclick="showPanel('writing')">✍ Chapters</div>
+    <div class="nav-tab" onclick="renderIndex(); showPanel('index')">📖 Index</div>
+    <div class="nav-tab" onclick="refreshProgress(); showPanel('progress')">📊 Progress</div>
+    <div class="nav-tab" onclick="showPanel('gitsync')">☁ GitHub Sync</div>
+    <div class="nav-tab" onclick="showPanel('github')">🐙 GitHub Guide</div>
+  </div>
+
+  <!-- WRITING PANEL -->
+  <div id="writing-panel" class="panel active">
+    <div class="panel-header">
+      <h2>Chapters &amp; Drafts</h2>
+    </div>
+
+    <div class="color-legend">
+      <span class="leg-title">Colour key:</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#c0392b"></span><span style="color:#c0392b;font-size:12px">Revisit &amp; polish</span></span>
+      <span class="leg-item"><span class="leg-dot" style="background:#1a6b2a"></span><span style="color:#1a6b2a;font-size:12px">Final polish</span></span>
+      <span class="leg-item"><span class="leg-dot" style="background:#7d4a00"></span><span style="color:#7d4a00;font-size:12px">Missing concept</span></span>
+      <span class="leg-item"><span class="leg-dot" style="background:#1a3d8b"></span><span style="color:#1a3d8b;font-size:12px">Check consistency</span></span>
+      <span class="leg-item"><span class="leg-dot" style="background:#5a1a7a"></span><span style="color:#5a1a7a;font-size:12px">Placeholder scene</span></span>
+      <span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;margin-left:8px;">Select text, then click a colour button in any chapter toolbar.</span>
+    </div>
+
+    <div id="add-chapter-bar">
+      <input type="text" id="new-chapter-title" placeholder="New chapter title…" onkeydown="if(event.key==='Enter') addChapter()">
+      <input type="number" id="new-chapter-target" placeholder="Word target (e.g. 3000)" min="100" style="max-width:200px">
+      <button class="small-btn" onclick="addChapter()">+ Add Chapter</button>
+    </div>
+
+    <div id="chapters-container"></div>
+  </div>
+
+  <!-- INDEX PANEL -->
+  <div id="index-panel" class="panel">
+    <div class="panel-header">
+      <h2>Table of Contents</h2>
+    </div>
+    <div class="index-book-title" id="idx-book-title">Tress</div>
+    <div class="index-subtitle">A novel — chapter index</div>
+    <div id="index-content"></div>
+  </div>
+
+  <!-- PROGRESS PANEL -->
+  <div id="progress-panel" class="panel">
+    <div class="panel-header">
+      <h2>Progress &amp; Writing Log</h2>
+    </div>
+    <div class="progress-summary" id="progress-summary"></div>
+    <table class="progress-table">
+      <thead><tr>
+        <th>Chapter</th><th>Words</th><th>Target</th><th>Progress</th><th>Status</th>
+      </tr></thead>
+      <tbody id="progress-table-body"></tbody>
+    </table>
+    <div class="session-log">
+      <h3>Writing Session Log</h3>
+      <div id="session-log-list"></div>
+    </div>
+  </div>
+
+  <!-- GITHUB SYNC PANEL -->
+  <div id="gitsync-panel" class="panel">
+    <h2>☁ Save to GitHub</h2>
+    <p class="gitsync-intro">
+      Enter your GitHub credentials below to push your writing directly to your repository. Your writing is saved into the HTML file itself and committed to GitHub, so every save is a versioned snapshot you can always go back to.
+    </p>
+
+    <div class="gitsync-form">
+      <h3>Repository Settings</h3>
+      <div class="form-row">
+        <label>GitHub Username</label>
+        <input type="text" id="gh-user" placeholder="e.g. kyantiredmoss-write" autocomplete="username">
+        <span class="hint">Your GitHub username — visible in your profile URL.</span>
+      </div>
+      <div class="form-row">
+        <label>Repository Name</label>
+        <input type="text" id="gh-repo" placeholder="e.g. tress-workpad" value="tress-workpad">
+        <span class="hint">The repository where index.html lives.</span>
+      </div>
+      <div class="form-row">
+        <label>File Path in Repo</label>
+        <input type="text" id="gh-path" placeholder="index.html" value="index.html">
+        <span class="hint">Usually just <code>index.html</code> if it's in the root.</span>
+      </div>
+      <div class="form-row">
+        <label>GitHub Token (Personal Access Token)</label>
+        <input type="password" id="gh-token" placeholder="ghp_…" autocomplete="current-password">
+        <span class="hint">Create one at <strong>github.com → Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong>. Give it <em>Contents: Read &amp; Write</em> on your repo. Your token is never stored anywhere except this browser tab.</span>
+      </div>
+      <div class="form-row">
+        <label>Commit Message <span style="font-size:10px;color:#9a8a70">(leave blank to auto-generate)</span></label>
+        <input type="text" id="gh-message" placeholder="e.g. Chapter 3 — first draft done">
+      </div>
+      <button class="sync-btn" onclick="doGitHubCommit()" id="sync-btn">
+        <span id="sync-btn-icon">☁</span>
+        <span id="sync-btn-label">Commit &amp; Push</span>
+      </button>
+      <div id="sync-log">Ready. Fill in your credentials above and click Commit &amp; Push.</div>
+    </div>
+
+    <div class="gh-section" style="margin-top:0">
+      <h3 style="font-size:17px">🔑 How to create a Personal Access Token</h3>
+      <ol>
+        <li>Go to <strong>github.com</strong> and sign in.</li>
+        <li>Click your avatar (top right) → <strong>Settings</strong>.</li>
+        <li>In the left sidebar, scroll to <strong>Developer settings</strong> → <strong>Personal access tokens</strong> → <strong>Fine-grained tokens</strong>.</li>
+        <li>Click <strong>Generate new token</strong>.</li>
+        <li>Give it any name (e.g. <em>Tress Workpad</em>). Set expiry to 1 year.</li>
+        <li>Under <strong>Repository access</strong>, choose <strong>Only select repositories</strong> and pick your <code>tress-workpad</code> repo.</li>
+        <li>Under <strong>Permissions → Repository permissions</strong>, set <strong>Contents</strong> to <strong>Read and write</strong>.</li>
+        <li>Click <strong>Generate token</strong>, copy it, and paste it above.</li>
+      </ol>
+      <div class="warn-box">⚠ Your token gives write access to your repo. Do not share it. It is only held in memory during this browser session — it is never stored on disk or sent anywhere except directly to the GitHub API.</div>
+    </div>
+  </div>
+
+  <!-- GITHUB GUIDE PANEL -->
+  <div id="github-panel" class="panel">
+    <h2>GitHub Guide — Hosting Your Workpad</h2>
+    <p class="intro">
+      This guide walks you through hosting this file on GitHub Pages — completely free, no technical experience needed. Once set up, your workpad will live at a URL you can open from any browser.
+    </p>
+
+    <div class="gh-section">
+      <h3><span class="step-num">1</span> Create a GitHub account (if you don't have one)</h3>
+      <p>Go to <strong>github.com</strong> and sign up. Then come back here to the <strong>☁ GitHub Sync</strong> tab to push your writing directly.</p>
+    </div>
+
+    <div class="gh-section">
+      <h3><span class="step-num">2</span> Create a new repository</h3>
+      <ol>
+        <li>Once logged in, click the green <strong>"New"</strong> button (or the <strong>+</strong> icon, top-right).</li>
+        <li>Name the repository exactly: <code>tress-workpad</code></li>
+        <li>Set it to <strong>Public</strong> (required for free GitHub Pages hosting).</li>
+        <li>Tick <strong>"Add a README file"</strong>.</li>
+        <li>Click <strong>"Create repository"</strong>.</li>
+      </ol>
+    </div>
+
+    <div class="gh-section">
+      <h3><span class="step-num">3</span> Upload this file the first time</h3>
+      <ol>
+        <li>Inside your new repository, click <strong>"Add file" → "Upload files"</strong>.</li>
+        <li>Upload this HTML file. Name it exactly: <code>index.html</code></li>
+        <li>Click <strong>"Commit changes"</strong>.</li>
+      </ol>
+      <div class="tip-box">💡 After the first upload, you can use the <strong>☁ GitHub Sync</strong> tab in this workpad to commit directly without ever touching GitHub's website again.</div>
+    </div>
+
+    <div class="gh-section">
+      <h3><span class="step-num">4</span> Turn on GitHub Pages</h3>
+      <ol>
+        <li>In your repository, click <strong>Settings</strong>.</li>
+        <li>Scroll down the left sidebar to <strong>Pages</strong>.</li>
+        <li>Under "Source", select <strong>Deploy from a branch</strong>.</li>
+        <li>Choose branch: <strong>main</strong>, folder: <strong>/ (root)</strong>.</li>
+        <li>Click <strong>Save</strong>. Your live URL will appear after a minute or two.</li>
+      </ol>
+      <p>Your workpad will be live at:</p>
+      <div class="gh-url">https://kyantiredmoss-write.github.io/tress-workpad/</div>
+    </div>
+
+    <div class="gh-section">
+      <h3><span class="step-num">5</span> Saving your writing going forward</h3>
+      <p>Use the <strong>☁ Save to GitHub</strong> button at the top of this page — or go to the <strong>☁ GitHub Sync</strong> tab. This bakes your writing directly into the HTML file and commits it to GitHub. No more manual uploading.</p>
+      <div class="tip-box">✓ Every commit creates a versioned snapshot. Go to your repository → <strong>Commits</strong> to see the full history and restore any earlier version.</div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<!-- PDF MODAL -->
+<div id="pdf-modal">
+  <div id="pdf-modal-box">
+    <h3>Download as PDF</h3>
+    <p>This will open a print-ready view of your draft chapters (ideas &amp; concepts notes are excluded). Colour annotations are preserved. Use your browser's <strong>Print</strong> dialog and choose <strong>"Save as PDF"</strong>.</p>
+    <div id="pdf-modal-btns">
+      <button class="modal-btn primary" onclick="doPrint()">Open Print View</button>
+      <button class="modal-btn secondary" onclick="closePdfModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- HIDDEN PRINT AREA -->
+<div id="print-area"></div>
+
+<script>
+// ─── STORAGE KEY ───────────────────────────────────────────────────────────
+const STORE_KEY = 'tress_workpad_v5';
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let state = {
+  chapters: [],
+  sessionLog: []
+};
+
+// ─── COLOR ANNOTATION DATA ─────────────────────────────────────────────────
+const COLORS = [
+  { id: 'revisit',     label: 'Revisit & polish',    hex: '#c0392b', cls: 'cr', sym: '🔄' },
+  { id: 'final',       label: 'Final polish',         hex: '#1a6b2a', cls: 'cf', sym: '✨' },
+  { id: 'missing',     label: 'Missing concept',      hex: '#7d4a00', cls: 'cm', sym: '❓' },
+  { id: 'consistency', label: 'Check consistency',    hex: '#1a3d8b', cls: 'cc', sym: '⚠' },
+  { id: 'placeholder', label: 'Placeholder scene',    hex: '#5a1a7a', cls: 'cp', sym: '📝' },
+];
+
+const SYMBOLS = [
+  { sym: '🔄', tip: 'Revisit & polish' },
+  { sym: '✨', tip: 'Final polish' },
+  { sym: '❓', tip: 'Missing concept here' },
+  { sym: '⚠', tip: 'Check consistency' },
+  { sym: '📝', tip: 'Placeholder scene' },
+  { sym: '✦', tip: 'Scene break' },
+  { sym: '※', tip: 'Note to self' },
+  { sym: '—', tip: 'Em dash' },
+  { sym: '…', tip: 'Ellipsis' },
+  { sym: '§', tip: 'Section marker' },
+];
+
+// Per-textarea active color tracking
+let activeColors = {}; // chId-type -> colorId or null
+
+// ─── LOAD ──────────────────────────────────────────────────────────────────
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.chapters)) {
+        state = parsed;
+      }
+    }
+  } catch(e) {
+    console.warn('Could not load state:', e);
+  }
+}
+
+// ─── SAVE ──────────────────────────────────────────────────────────────────
+let saveTimer = null;
+function scheduleSave() {
+  const el = document.getElementById('save-status');
+  el.textContent = 'Saving…';
+  el.className = 'saving';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 700);
+}
+
+function doSave() {
+  collectFromDOM();
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    const now = new Date();
+    const ts = now.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'})
+               + ' ' + now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+    const el = document.getElementById('save-status');
+    el.textContent = 'Saved locally: ' + ts;
+    el.className = 'saved';
+  } catch(e) {
+    const el = document.getElementById('save-status');
+    el.textContent = 'Save failed — storage may be full';
+    el.className = 'error';
+  }
+}
+
+// ─── COLLECT FROM DOM INTO STATE ───────────────────────────────────────────
+function collectFromDOM() {
+  state.chapters.forEach(function(ch) {
+    const card = document.getElementById('ch-' + ch.id);
+    if (!card) return;
+    const nameEl = card.querySelector('.chapter-name-input');
+    if (nameEl) ch.name = nameEl.value;
+    const targetEl = card.querySelector('.ch-target');
+    if (targetEl) ch.target = parseInt(targetEl.value) || 0;
+    const povEl = card.querySelector('.ch-pov');
+    if (povEl) ch.pov = povEl.value;
+    const statusEl = card.querySelector('.ch-status');
+    if (statusEl) ch.status = statusEl.value;
+    const locationEl = card.querySelector('.ch-location');
+    if (locationEl) ch.location = locationEl.value;
+    const draftEl = card.querySelector('.draft-area[data-type="draft"]');
+    if (draftEl) ch.draft = draftEl.value;
+    const ideasEl = card.querySelector('.draft-area[data-type="ideas"]');
+    if (ideasEl) ch.ideas = ideasEl.value;
+    // draft HTML (colored)
+    const draftEditor = card.querySelector('.draft-editor[data-type="draft"]');
+    if (draftEditor) ch.draftHtml = draftEditor.innerHTML;
+    const ideasEditor = card.querySelector('.draft-editor[data-type="ideas"]');
+    if (ideasEditor) ch.ideasHtml = ideasEditor.innerHTML;
+    ch.collapsed = card.classList.contains('collapsed');
+  });
+}
+
+// ─── CHAPTER MANAGEMENT ────────────────────────────────────────────────────
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+}
+
+function addChapter() {
+  const titleInput = document.getElementById('new-chapter-title');
+  const targetInput = document.getElementById('new-chapter-target');
+  const name = titleInput.value.trim() || 'Untitled Chapter';
+  const target = parseInt(targetInput.value) || 3000;
+  const ch = {
+    id: genId(),
+    name: name,
+    pov: '',
+    status: 'drafting',
+    location: '',
+    target: target,
+    draft: '',
+    draftHtml: '',
+    ideas: '',
+    ideasHtml: '',
+    collapsed: false,
+    createdAt: new Date().toISOString()
+  };
+  state.chapters.push(ch);
+  titleInput.value = '';
+  targetInput.value = '';
+  renderChapter(ch);
+  scheduleSave();
+}
+
+function deleteChapter(id) {
+  if (!confirm('Delete this chapter? This cannot be undone.')) return;
+  state.chapters = state.chapters.filter(function(c){ return c.id !== id; });
+  const card = document.getElementById('ch-' + id);
+  if (card) card.remove();
+  renumberChapters();
+  scheduleSave();
+}
+
+function renumberChapters() {
+  const cards = document.querySelectorAll('.chapter-card');
+  cards.forEach(function(card, i) {
+    const numEl = card.querySelector('.chapter-num');
+    if (numEl) numEl.textContent = 'Chapter ' + (i + 1);
+  });
+}
+
+function toggleChapter(id) {
+  const card = document.getElementById('ch-' + id);
+  if (!card) return;
+  card.classList.toggle('collapsed');
+  scheduleSave();
+}
+
+// ─── INNER TABS ─────────────────────────────────────────────────────────────
+function switchInnerTab(chId, tab) {
+  const card = document.getElementById('ch-' + chId);
+  if (!card) return;
+  card.querySelectorAll('.inner-tab').forEach(function(t){ t.classList.remove('active'); });
+  card.querySelectorAll('.inner-tab-content').forEach(function(t){ t.classList.remove('active'); });
+  const tabEl = card.querySelector('.inner-tab[data-tab="' + tab + '"]');
+  const contentEl = card.querySelector('.inner-tab-content[data-tab="' + tab + '"]');
+  if (tabEl) tabEl.classList.add('active');
+  if (contentEl) contentEl.classList.add('active');
+}
+
+// ─── WORD COUNT ─────────────────────────────────────────────────────────────
+function countWords(text) {
+  if (!text || !text.trim()) return 0;
+  return text.trim().split(/\s+/).length;
+}
+
+function countWordsInHtml(html) {
+  if (!html) return 0;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  const text = tmp.textContent || tmp.innerText || '';
+  return countWords(text);
+}
+
+function updateWordCountFromEditor(chId, type) {
+  const card = document.getElementById('ch-' + chId);
+  if (!card) return;
+  const editor = card.querySelector('.draft-editor[data-type="' + type + '"]');
+  if (!editor) return;
+  const wc = countWordsInHtml(editor.innerHTML);
+  const wcEl = card.querySelector('.wc-' + type);
+  if (wcEl) wcEl.textContent = wc + ' words';
+  if (type === 'draft') {
+    const hdrWc = card.querySelector('.chapter-wc');
+    if (hdrWc) hdrWc.textContent = wc + ' words';
+  }
+}
+
+function updateTimestamp(chId, type) {
+  const card = document.getElementById('ch-' + chId);
+  if (!card) return;
+  const tsEl = card.querySelector('.ts-' + type);
+  if (!tsEl) return;
+  const now = new Date();
+  tsEl.textContent = 'Edited ' + now.toLocaleDateString('en-GB', {day:'2-digit', month:'short'})
+    + ' at ' + now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+}
+
+// ─── COLOR ANNOTATION ───────────────────────────────────────────────────────
+function setActiveColor(chId, type, colorId) {
+  const key = chId + '-' + type;
+  const prev = activeColors[key];
+  activeColors[key] = (prev === colorId) ? null : colorId;
+
+  const card = document.getElementById('ch-' + chId);
+  if (!card) return;
+  const tb = card.querySelector('.writing-toolbar[data-tbfor="' + type + '"]');
+  if (!tb) return;
+  tb.querySelectorAll('.col-btn').forEach(function(btn) {
+    btn.classList.remove('active-color');
+  });
+  if (activeColors[key]) {
+    const activeBtn = tb.querySelector('.col-btn[data-col="' + activeColors[key] + '"]');
+    if (activeBtn) activeBtn.classList.add('active-color');
+  }
+}
+
+function applyColorToSelection(chId, type) {
+  const key = chId + '-' + type;
+  const colorId = activeColors[key];
+  const card = document.getElementById('ch-' + chId);
+  if (!card) return;
+  const editor = card.querySelector('.draft-editor[data-type="' + type + '"]');
+  if (!editor) return;
+
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) return;
+
+  // Check selection is inside our editor
+  const range = sel.getRangeAt(0);
+  if (!editor.contains(range.commonAncestorContainer)) return;
+
+  if (!colorId) {
+    // Remove color: unwrap spans
+    document.execCommand('removeFormat');
+    return;
+  }
+
+  const col = COLORS.find(function(c){ return c.id === colorId; });
+  if (!col) return;
+
+  // Use execCommand foreColor for simplicity (works inline)
+  document.execCommand('styleWithCSS', false, true);
+  document.execCommand('foreColor', false, col.hex);
+}
+
+function insertSymbol(chId, type, sym) {
+  const card = document.getElementById('ch-' + chId);
+  if (!card) return;
+  const editor = card.querySelector('.draft-editor[data-type="' + type + '"]');
+  if (!editor) return;
+  editor.focus();
+  document.execCommand('insertText', false, sym);
+  updateWordCountFromEditor(chId, type);
+  updateTimestamp(chId, type);
+  scheduleSave();
+}
+
+// ─── BUILD TOOLBAR HTML ──────────────────────────────────────────────────────
+function buildToolbar(chId, type) {
+  const colorBtns = COLORS.map(function(col) {
+    return '<button class="col-btn col-btn-' + col.id + '" data-col="' + col.id + '" '
+      + 'onclick="setActiveColor(\'' + chId + '\',\'' + type + '\',\'' + col.id + '\')" '
+      + 'title="' + col.label + '">'
+      + '<span class="swatch" style="background:' + col.hex + '"></span>'
+      + col.label + '</button>';
+  }).join('');
+
+  const resetBtn = '<button class="col-btn col-btn-reset" data-col="reset" '
+    + 'onclick="setActiveColor(\'' + chId + '\',\'' + type + '\',null); applyColorToSelection(\'' + chId + '\',\'' + type + '\')" '
+    + 'title="Remove colour">✕ Remove colour</button>';
+
+  const applyBtn = '<button class="col-btn" style="background:var(--parchment2);border:1px solid var(--border);color:var(--ink);" '
+    + 'onclick="applyColorToSelection(\'' + chId + '\',\'' + type + '\')" '
+    + 'title="Apply selected colour to selected text">Apply to selection</button>';
+
+  const symBtns = SYMBOLS.map(function(s) {
+    return '<button class="sym-btn" onclick="insertSymbol(\'' + chId + '\',\'' + type + '\',\'' + s.sym + '\')" title="' + s.tip + '">' + s.sym + '</button>';
+  }).join('');
+
+  return '<div class="writing-toolbar" data-tbfor="' + type + '">'
+    + '<span class="toolbar-label">Colour:</span>'
+    + colorBtns
+    + applyBtn
+    + resetBtn
+    + '<div class="toolbar-sep"></div>'
+    + '<span class="toolbar-label">Insert:</span>'
+    + symBtns
+    + '</div>';
+}
+
+// ─── RENDER CHAPTER ─────────────────────────────────────────────────────────
+function renderChapter(ch) {
+  const container = document.getElementById('chapters-container');
+  const idx = state.chapters.findIndex(function(c){ return c.id === ch.id; });
+  const num = idx + 1;
+
+  const card = document.createElement('div');
+  card.className = 'chapter-card' + (ch.collapsed ? ' collapsed' : '');
+  card.id = 'ch-' + ch.id;
+
+  const draftWC = ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft);
+  const ideasWC = ch.ideasHtml ? countWordsInHtml(ch.ideasHtml) : countWords(ch.ideas);
+
+  // Migrate plain text to HTML if needed
+  const draftContent = ch.draftHtml || escHtml(ch.draft || '').replace(/\n/g, '<br>');
+  const ideasContent = ch.ideasHtml || escHtml(ch.ideas || '').replace(/\n/g, '<br>');
+
+  card.innerHTML = `
+    <div class="chapter-header" onclick="toggleChapter('${ch.id}')">
+      <div class="chapter-title-wrap">
+        <span class="chapter-num">Chapter ${num}</span>
+        <input class="chapter-name-input" type="text" value="${escHtml(ch.name)}"
+               onclick="event.stopPropagation()"
+               oninput="scheduleSave()"
+               placeholder="Chapter title…">
+        <span class="chapter-wc">${draftWC} words</span>
+      </div>
+      <span class="chapter-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="chapter-meta">
+        <div class="meta-field">
+          <label>POV Character</label>
+          <input class="ch-pov" type="text" value="${escHtml(ch.pov || '')}" placeholder="e.g. Tress" oninput="scheduleSave()">
+        </div>
+        <div class="meta-field">
+          <label>Status</label>
+          <select class="ch-status" onchange="scheduleSave()">
+            <option value="drafting" ${ch.status==='drafting'?'selected':''}>Drafting</option>
+            <option value="revising" ${ch.status==='revising'?'selected':''}>Revising</option>
+            <option value="complete" ${ch.status==='complete'?'selected':''}>Complete</option>
+            <option value="outline" ${ch.status==='outline'?'selected':''}>Outline only</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>Location / Setting</label>
+          <input class="ch-location" type="text" value="${escHtml(ch.location || '')}" placeholder="e.g. The Midnight Sea" oninput="scheduleSave()">
+        </div>
+        <div class="meta-field">
+          <label>Word Target</label>
+          <input class="ch-target" type="number" value="${ch.target || 3000}" min="100" oninput="scheduleSave()">
+        </div>
+      </div>
+
+      <div class="inner-tabs">
+        <div class="inner-tab active" data-tab="draft" onclick="switchInnerTab('${ch.id}','draft')">✍ Draft</div>
+        <div class="inner-tab" data-tab="ideas" onclick="switchInnerTab('${ch.id}','ideas')">💡 Ideas &amp; Concepts</div>
+      </div>
+
+      <div class="inner-tab-content active" data-tab="draft">
+        ${buildToolbar(ch.id, 'draft')}
+        <div class="draft-area draft-editor" data-type="draft" data-chid="${ch.id}"
+          contenteditable="true"
+          spellcheck="true"
+          style="min-height:220px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;background:#fdfaf3;border:1px solid var(--border);border-radius:3px;resize:vertical;"
+          oninput="updateWordCountFromEditor('${ch.id}','draft'); updateTimestamp('${ch.id}','draft'); scheduleSave()"
+          onkeyup="syncEditorToState('${ch.id}','draft')"
+          placeholder="Write your draft here…"
+        >${draftContent}</div>
+        <div class="area-footer">
+          <span class="wc-draft">${draftWC} words</span>
+          <span class="ts-draft ts">${(ch.draftHtml||ch.draft) ? 'Previously edited' : 'Not yet started'}</span>
+        </div>
+      </div>
+
+      <div class="inner-tab-content" data-tab="ideas">
+        <div style="background:#f0eef8;border:1px solid #c8c0e8;border-radius:4px;padding:8px 12px;margin-bottom:10px;font-family:var(--font-ui);font-size:12px;color:#5a4a7a;letter-spacing:0.04em;">
+          💡 This space is for brainstorms, references, character notes, world-building ideas — anything. It will <strong>not</strong> appear in the PDF export.
+        </div>
+        ${buildToolbar(ch.id, 'ideas')}
+        <div class="draft-area ideas-area draft-editor" data-type="ideas" data-chid="${ch.id}"
+          contenteditable="true"
+          spellcheck="true"
+          style="min-height:180px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;background:#f3f0fb;border:1px solid var(--lavender2);border-radius:3px;"
+          oninput="updateWordCountFromEditor('${ch.id}','ideas'); updateTimestamp('${ch.id}','ideas'); scheduleSave()"
+          placeholder="Dump ideas, references, concept notes, research, reminders… anything goes here."
+        >${ideasContent}</div>
+        <div class="area-footer">
+          <span class="wc-ideas">${ideasWC} words</span>
+          <span class="ts-ideas ts">${(ch.ideasHtml||ch.ideas) ? 'Previously edited' : 'Nothing yet'}</span>
+        </div>
+      </div>
+
+      <div class="chapter-actions">
+        <button class="small-btn danger" onclick="deleteChapter('${ch.id}')">🗑 Delete Chapter</button>
+      </div>
+    </div>
+  `;
+
+  container.appendChild(card);
+
+  // Add placeholder handling for contenteditable
+  const editors = card.querySelectorAll('.draft-editor');
+  editors.forEach(function(ed) {
+    ed.addEventListener('focus', function() { ed.classList.add('focused'); });
+    ed.addEventListener('blur', function() { ed.classList.remove('focused'); });
+  });
+}
+
+function syncEditorToState(chId, type) {
+  // Keep plain text fallback in sync for word counting etc.
+  const card = document.getElementById('ch-' + chId);
+  if (!card) return;
+  const editor = card.querySelector('.draft-editor[data-type="' + type + '"]');
+  if (!editor) return;
+  const ch = state.chapters.find(function(c){ return c.id === chId; });
+  if (!ch) return;
+  if (type === 'draft') {
+    ch.draftHtml = editor.innerHTML;
+    ch.draft = editor.textContent || editor.innerText || '';
+  } else {
+    ch.ideasHtml = editor.innerHTML;
+    ch.ideas = editor.textContent || editor.innerText || '';
+  }
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── RENDER ALL CHAPTERS ────────────────────────────────────────────────────
+function renderAll() {
+  const container = document.getElementById('chapters-container');
+  container.innerHTML = '';
+  state.chapters.forEach(function(ch){ renderChapter(ch); });
+}
+
+// ─── PANEL SWITCHING ────────────────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+  const panel = document.getElementById(name + '-panel');
+  if (panel) panel.classList.add('active');
+  const map = {writing:0, index:1, progress:2, gitsync:3, github:4};
+  const tabs = document.querySelectorAll('.nav-tab');
+  if (map[name] !== undefined && tabs[map[name]]) tabs[map[name]].classList.add('active');
+}
+
+// ─── INDEX ──────────────────────────────────────────────────────────────────
+function renderIndex() {
+  collectFromDOM();
+  const cont = document.getElementById('index-content');
+  if (state.chapters.length === 0) {
+    cont.innerHTML = '<div class="index-empty">No chapters yet. Add chapters in the ✍ Chapters tab and they will appear here automatically.</div>';
+    return;
+  }
+  let html = '<table class="index-table"><tbody>';
+  state.chapters.forEach(function(ch, i) {
+    const wc = ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft);
+    const statusCls = ch.status || 'drafting';
+    html += '<tr onclick="showPanel(\'writing\')" title="Go to chapter">'
+      + '<td class="idx-num">Chapter ' + (i+1) + '</td>'
+      + '<td class="idx-name">' + escHtml(ch.name) + '</td>'
+      + '<td class="idx-pov">' + (ch.pov ? escHtml(ch.pov) : '') + '</td>'
+      + '<td><span class="idx-status ' + statusCls + '">' + statusCls + '</span></td>'
+      + '<td class="idx-wc">' + wc.toLocaleString() + ' w</td>'
+      + '</tr>';
+  });
+  html += '</tbody></table>';
+
+  // Total
+  const totalWC = state.chapters.reduce(function(acc, ch) {
+    return acc + (ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft));
+  }, 0);
+  html += '<div style="font-family:var(--font-ui);font-size:12px;color:#9a8a70;margin-top:14px;text-align:right;letter-spacing:0.05em;">'
+    + state.chapters.length + ' chapters &nbsp;·&nbsp; '
+    + totalWC.toLocaleString() + ' words total'
+    + '</div>';
+
+  cont.innerHTML = html;
+}
+
+// ─── PROGRESS ───────────────────────────────────────────────────────────────
+function refreshProgress() {
+  collectFromDOM();
+  const tbody = document.getElementById('progress-table-body');
+  const summary = document.getElementById('progress-summary');
+  tbody.innerHTML = '';
+
+  let totalWords = 0;
+  let chaptersComplete = 0;
+
+  state.chapters.forEach(function(ch) {
+    const wc = ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft);
+    totalWords += wc;
+    if (ch.status === 'complete') chaptersComplete++;
+    const target = ch.target || 3000;
+    const pct = Math.min(100, Math.round((wc / target) * 100));
+    const over = wc > target;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><em>${escHtml(ch.name)}</em></td>
+      <td>${wc.toLocaleString()}</td>
+      <td>${target.toLocaleString()}</td>
+      <td style="min-width:120px">
+        <div class="pbar-wrap"><div class="pbar ${over?'over':''}" style="width:${pct}%"></div></div>
+        <div style="font-size:10px;color:#9a8a70;margin-top:2px;font-family:var(--font-ui)">${pct}%</div>
+      </td>
+      <td><span style="font-family:var(--font-ui);font-size:12px;color:${ch.status==='complete'?'#5a8e5a':ch.status==='revising'?'#8e6a2a':'#6a6a8e'}">${ch.status}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const today = new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+  summary.innerHTML = `
+    <div class="stat-card">
+      <div class="label">Total Words</div>
+      <div class="value">${totalWords.toLocaleString()}</div>
+      <div class="sub">across all chapters</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Chapters</div>
+      <div class="value">${state.chapters.length}</div>
+      <div class="sub">${chaptersComplete} marked complete</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Today</div>
+      <div class="value" style="font-size:18px;line-height:1.2;padding-top:4px">${today}</div>
+      <div class="sub">keep going ✦</div>
+    </div>
+  `;
+
+  renderSessionLog();
+}
+
+// ─── SESSION LOG ─────────────────────────────────────────────────────────────
+let sessionBaseline = {};
+
+function initSessionBaseline() {
+  state.chapters.forEach(function(ch) {
+    const wc = ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft);
+    sessionBaseline[ch.id] = wc;
+  });
+}
+
+function checkSession(chId) {
+  const ch = state.chapters.find(function(c){ return c.id === chId; });
+  if (!ch) return;
+  const current = ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft);
+  const baseline = sessionBaseline[chId] || 0;
+  const added = current - baseline;
+  if (added >= 50) {
+    const today = new Date().toISOString().slice(0,10);
+    const existing = (state.sessionLog || []).find(function(s){
+      return s.chId === chId && s.date === today;
+    });
+    if (existing) {
+      existing.words = Math.max(existing.words, added);
+    } else {
+      if (!state.sessionLog) state.sessionLog = [];
+      state.sessionLog.unshift({
+        date: today,
+        chId: chId,
+        chName: ch.name,
+        words: added
+      });
+      if (state.sessionLog.length > 100) state.sessionLog = state.sessionLog.slice(0,100);
+    }
+    sessionBaseline[chId] = current;
+  }
+}
+
+document.addEventListener('input', function(e) {
+  const editor = e.target;
+  if (editor.classList.contains('draft-editor') && editor.dataset.type === 'draft') {
+    const chId = editor.dataset.chid;
+    if (chId) {
+      const ch = state.chapters.find(function(c){ return c.id === chId; });
+      if (ch) {
+        ch.draftHtml = editor.innerHTML;
+        ch.draft = editor.textContent || editor.innerText || '';
+      }
+      checkSession(chId);
+    }
+  }
+});
+
+function renderSessionLog() {
+  const el = document.getElementById('session-log-list');
+  const log = state.sessionLog || [];
+  if (log.length === 0) {
+    el.innerHTML = '<div class="empty-log">No sessions recorded yet. Write 50+ words in a chapter to log a session.</div>';
+    return;
+  }
+  el.innerHTML = log.slice(0,30).map(function(s) {
+    const d = new Date(s.date);
+    const ds = d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+    return `<div class="session-item">
+      <span class="session-date">${ds}</span>
+      <span class="session-chapter">${escHtml(s.chName)}</span>
+      <span class="session-words">+${s.words} words</span>
+    </div>`;
+  }).join('');
+}
+
+// ─── PDF PRINT ───────────────────────────────────────────────────────────────
+function openPdfModal() {
+  document.getElementById('pdf-modal').classList.add('open');
+}
+function closePdfModal() {
+  document.getElementById('pdf-modal').classList.remove('open');
+}
+
+function doPrint() {
+  closePdfModal();
+  collectFromDOM();
+  const pa = document.getElementById('print-area');
+  const today = new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'long', year:'numeric'});
+
+  // Build index for print
+  let indexRows = state.chapters.map(function(ch, i) {
+    const wc = ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft);
+    return '<tr><td style="padding:5px 10px;color:#b8860b;font-size:10pt;">Chapter ' + (i+1) + '</td>'
+      + '<td style="padding:5px 10px;font-style:italic;">' + escHtml(ch.name) + '</td>'
+      + '<td style="padding:5px 10px;font-size:9pt;color:#888;">' + (ch.pov || '') + '</td>'
+      + '<td style="padding:5px 10px;font-size:9pt;color:#888;">' + wc.toLocaleString() + ' w</td></tr>';
+  }).join('');
+
+  let html = `<h1>Tress — Draft Manuscript</h1>
+<div class="print-meta">Exported on ${today} &nbsp;·&nbsp; ${state.chapters.length} chapter(s)</div>
+<div class="print-index">
+  <h2>Table of Contents</h2>
+  <table><tbody>${indexRows}</tbody></table>
+</div>`;
+
+  state.chapters.forEach(function(ch, i) {
+    const htmlContent = ch.draftHtml || '';
+    const plainContent = ch.draft || '';
+    if (!htmlContent.trim() && !plainContent.trim()) return;
+
+    let bodyHtml;
+    if (ch.draftHtml && ch.draftHtml.trim()) {
+      // Render rich HTML content with color spans preserved
+      const tmp = document.createElement('div');
+      tmp.innerHTML = ch.draftHtml;
+      // Re-map font colors to print-safe spans
+      // Colors are already inline via execCommand foreColor, so they'll print fine
+      bodyHtml = '<div style="line-height:1.9">' + ch.draftHtml + '</div>';
+    } else {
+      const paragraphs = plainContent.split(/\n+/).filter(function(p){ return p.trim(); });
+      bodyHtml = paragraphs.map(function(p){ return '<p>' + escHtml(p) + '</p>'; }).join('');
+    }
+
+    html += `<div class="print-chapter">
+  <h2>Chapter ${i+1} — ${escHtml(ch.name)}</h2>
+  <div class="ch-meta">POV: ${escHtml(ch.pov || '—')} &nbsp;·&nbsp; Status: ${ch.status} &nbsp;·&nbsp; ${(ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(plainContent))} words</div>
+  ${bodyHtml}
+</div>`;
+  });
+
+  pa.innerHTML = html;
+
+  setTimeout(function() {
+    window.print();
+    setTimeout(function(){ pa.innerHTML = ''; }, 2000);
+  }, 200);
+}
+
+// ─── GITHUB COMMIT ──────────────────────────────────────────────────────────
+function getGHSettings() {
+  return {
+    user:    (document.getElementById('gh-user').value || '').trim(),
+    repo:    (document.getElementById('gh-repo').value || '').trim(),
+    path:    (document.getElementById('gh-path').value || 'index.html').trim(),
+    token:   (document.getElementById('gh-token').value || '').trim(),
+    message: (document.getElementById('gh-message').value || '').trim(),
+  };
+}
+
+function syncLog(msg, cls) {
+  const el = document.getElementById('sync-log');
+  if (el) {
+    el.className = cls || '';
+    el.textContent = msg;
+  }
+}
+
+async function doGitHubCommit() {
+  const s = getGHSettings();
+  if (!s.user || !s.repo || !s.token) {
+    syncLog('⚠ Please fill in Username, Repository, and Token.', 'sync-error');
+    return;
+  }
+
+  const btn = document.getElementById('sync-btn');
+  const btnLabel = document.getElementById('sync-btn-label');
+  btn.disabled = true;
+  btnLabel.textContent = 'Committing…';
+  syncLog('Collecting your writing…');
+
+  // Collect latest state
+  collectFromDOM();
+  doSave(); // local save too
+
+  // Build the commit message
+  const totalWC = state.chapters.reduce(function(acc, ch) {
+    return acc + (ch.draftHtml ? countWordsInHtml(ch.draftHtml) : countWords(ch.draft));
+  }, 0);
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+  const autoMsg = 'Workpad save — ' + dateStr + ' ' + timeStr + ' — ' + state.chapters.length + ' chapters, ' + totalWC.toLocaleString() + ' words';
+  const commitMsg = s.message || autoMsg;
+
+  syncLog('Fetching current file SHA from GitHub…');
+
+  // Step 1: get current SHA of the file
+  let sha = null;
+  try {
+    const headResp = await fetch(
+      'https://api.github.com/repos/' + s.user + '/' + s.repo + '/contents/' + s.path,
+      { headers: { 'Authorization': 'token ' + s.token, 'Accept': 'application/vnd.github.v3+json' } }
+    );
+    if (headResp.status === 404) {
+      // File doesn't exist yet — will create it
+      sha = null;
+    } else if (!headResp.ok) {
+      const err = await headResp.json().catch(function(){ return {}; });
+      throw new Error('GitHub API error ' + headResp.status + ': ' + (err.message || headResp.statusText));
+    } else {
+      const headData = await headResp.json();
+      sha = headData.sha;
+    }
+  } catch(e) {
+    syncLog('✗ Failed to reach GitHub API.\n\n' + e.message + '\n\nCheck your username, repo name, and token.', 'sync-error');
+    btn.disabled = false;
+    btnLabel.textContent = 'Commit & Push';
+    return;
+  }
+
+  syncLog('Preparing file content…');
+
+  // Step 2: Get the current HTML of this page and bake state into it
+  const currentHtml = document.documentElement.outerHTML;
+
+  // Inject current state into the HTML so when loaded from GitHub it has data
+  // We do this by replacing the STORE_KEY in localStorage on load — 
+  // actually we bake the state directly into a script tag in the HTML
+  const stateJson = JSON.stringify(state);
+  // Replace or inject the initial state loader
+  let outputHtml = currentHtml;
+
+  // Remove any previously baked state
+  outputHtml = outputHtml.replace(/\/\/ ─── BAKED STATE ─+\n[\s\S]*?\/\/ ─── END BAKED STATE ─+\n/g, '');
+
+  // Inject baked state right before the STORE_KEY definition
+  const bakedBlock = '// ─── BAKED STATE ──────────────────────────────────────────────\n'
+    + 'const BAKED_STATE = ' + stateJson + ';\n'
+    + '// ─── END BAKED STATE ───────────────────────────────────────────\n';
+  outputHtml = outputHtml.replace("const STORE_KEY = 'tress_workpad_v5';", bakedBlock + "const STORE_KEY = 'tress_workpad_v5';");
+
+  // Encode to base64
+  let base64Content;
+  try {
+    base64Content = btoa(unescape(encodeURIComponent(outputHtml)));
+  } catch(e) {
+    syncLog('✗ Failed to encode file content: ' + e.message, 'sync-error');
+    btn.disabled = false;
+    btnLabel.textContent = 'Commit & Push';
+    return;
+  }
+
+  syncLog('Pushing to GitHub…');
+
+  // Step 3: PUT to GitHub API
+  try {
+    const body = {
+      message: commitMsg,
+      content: base64Content,
+    };
+    if (sha) body.sha = sha;
+
+    const putResp = await fetch(
+      'https://api.github.com/repos/' + s.user + '/' + s.repo + '/contents/' + s.path,
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'token ' + s.token,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    if (!putResp.ok) {
+      const err = await putResp.json().catch(function(){ return {}; });
+      throw new Error('GitHub API error ' + putResp.status + ': ' + (err.message || putResp.statusText));
+    }
+
+    const putData = await putResp.json();
+    const commitUrl = putData.commit && putData.commit.html_url ? putData.commit.html_url : '';
+
+    syncLog('✓ Successfully committed!\n\nCommit: ' + commitMsg + '\n\nYour GitHub Pages site will update in 1–2 minutes.\n' + (commitUrl ? 'Commit URL: ' + commitUrl : ''), 'sync-success');
+
+    // Update save status
+    const el = document.getElementById('save-status');
+    if (el) {
+      const ts = now.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}) + ' ' + timeStr;
+      el.textContent = '☁ Committed to GitHub: ' + ts;
+      el.className = 'saved';
+    }
+
+    // Clear commit message for next time
+    document.getElementById('gh-message').value = '';
+
+  } catch(e) {
+    syncLog('✗ Commit failed.\n\n' + e.message + '\n\nMake sure your token has "Contents: Read & write" permission on this repository.', 'sync-error');
+  }
+
+  btn.disabled = false;
+  btnLabel.textContent = 'Commit & Push';
+}
+
+// Quick commit from topbar button
+function quickCommit() {
+  showPanel('gitsync');
+  // Check if credentials are already filled
+  const s = getGHSettings();
+  if (s.user && s.repo && s.token) {
+    doGitHubCommit();
+  } else {
+    syncLog('Fill in your GitHub credentials below, then click Commit & Push.', '');
+  }
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+(function init() {
+  loadState();
+
+  // Load baked state if localStorage is empty (e.g. freshly loaded from GitHub)
+  if (state.chapters.length === 0 && typeof BAKED_STATE !== 'undefined' && BAKED_STATE && Array.isArray(BAKED_STATE.chapters) && BAKED_STATE.chapters.length > 0) {
+    state = BAKED_STATE;
+    // Persist to local storage too
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e) {}
+  }
+
+  if (!state.sessionLog) state.sessionLog = [];
+  renderAll();
+  initSessionBaseline();
+
+  const el = document.getElementById('save-status');
+  if (state.chapters.length > 0) {
+    el.textContent = 'Loaded from storage';
+    el.className = 'saved';
+    setTimeout(function(){ if (el.textContent === 'Loaded from storage') el.textContent = ''; }, 3000);
+  }
+
+  // Auto-save every 30 seconds
+  setInterval(function() {
+    collectFromDOM();
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch(e) {}
+  }, 30000);
+})();
+</script>
+</body>
+</html>
