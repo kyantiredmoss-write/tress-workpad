@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" data-theme=""><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tress — Writing Workpad</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=IM+Fell+English:ital@0;1&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
    THEME VARIABLES — 4 modes: parchment (default), dark, orange, bluepink
@@ -1022,13 +1020,22 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
   white-space: nowrap; pointer-events: none; z-index: 999;
 }
 </style>
-</head>
+<style type="text/css" id="operaUserStyle">
+    video {
+      filter: url('data:image/svg+xml,\
+        <svg xmlns="http://www.w3.org/2000/svg">\
+          <filter id="sharpen">\
+            <feConvolveMatrix order="3" preserveAlpha="true" kernelMatrix="1 -1 1 -1 -1 -1 1 -1 1"/>\
+          </filter>\
+        </svg>#sharpen');
+    }
+  </style><style type="text/css"></style></head>
 <body>
 
 <!-- TOP BAR -->
 <div id="topbar">
   <div class="title">✦ <span>Tress</span> — Writing Workpad</div>
-  <span id="save-status" class="saved"></span>
+  <span id="save-status" class="saved">Saved locally: 16 Apr 2026 22:04</span>
 
   <!-- Theme switcher -->
   <div id="theme-switcher" data-tip="Switch colour mode">
@@ -1036,7 +1043,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     <div class="theme-btn active" id="tbtn-parchment" data-theme="parchment" onclick="setTheme('parchment')" title="Parchment (light)"></div>
     <div class="theme-btn" id="tbtn-dark" data-theme="dark" onclick="setTheme('dark')" title="Dark"></div>
     <div class="theme-btn" id="tbtn-orange" data-theme="orange" onclick="setTheme('orange')" title="Amber / Orange"></div>
-    <div class="theme-btn" id="tbtn-bluepink" data-theme="bluepink" onclick="setTheme('bluepink')" title="Blue & Pink"></div>
+    <div class="theme-btn" id="tbtn-bluepink" data-theme="bluepink" onclick="setTheme('bluepink')" title="Blue &amp; Pink"></div>
   </div>
 
   <button class="topbtn green" onclick="quickCommit()" data-tip="Save &amp; commit to GitHub">☁ Save to GitHub</button>
@@ -1048,17 +1055,17 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
 <div id="main-wrap">
   <!-- NAV TABS -->
   <div id="nav-tabs">
-    <div class="nav-tab active" onclick="showPanel('writing')">✍ Chapters</div>
+    <div class="nav-tab" onclick="showPanel('writing')">✍ Chapters</div>
     <div class="nav-tab" onclick="renderIndex(); showPanel('index')">📖 Index</div>
     <div class="nav-tab" onclick="refreshProgress(); showPanel('progress')">📊 Progress</div>
     <div class="nav-tab" onclick="renderTimeline(); showPanel('timeline')">🕰 Timeline</div>
     <div class="nav-tab" onclick="renderTools(); showPanel('tools')">🖋 Author's Tools</div>
-    <div class="nav-tab" onclick="showPanel('gitsync')">☁ GitHub Sync</div>
+    <div class="nav-tab active" onclick="showPanel('gitsync')">☁ GitHub Sync</div>
     <div class="nav-tab" onclick="showPanel('github')">🐙 GitHub Guide</div>
   </div>
 
   <!-- WRITING PANEL -->
-  <div id="writing-panel" class="panel active">
+  <div id="writing-panel" class="panel">
     <div class="panel-header">
       <h2>Chapters &amp; Drafts</h2>
     </div>
@@ -1079,7 +1086,85 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
       <button class="small-btn" onclick="addChapter()">+ Add Chapter</button>
     </div>
 
-    <div id="chapters-container"></div>
+    <div id="chapters-container"><div class="chapter-card" id="ch-mo1yurxxfnql">
+    <div class="chapter-header" onclick="toggleChapter('mo1yurxxfnql')">
+      <div class="chapter-title-wrap">
+        <span class="chapter-num">Chapter 1</span>
+        <input class="chapter-name-input" type="text" value="Untitled Chapter" onclick="event.stopPropagation()" oninput="scheduleSave()" placeholder="Chapter title…">
+        <span class="chapter-wc">4 words</span>
+      </div>
+      <span class="chapter-toggle">▾</span>
+    </div>
+    <div class="chapter-body">
+      <div class="chapter-meta">
+        <div class="meta-field">
+          <label>POV Character</label>
+          <input class="ch-pov" type="text" value="" placeholder="e.g. Tress" oninput="scheduleSave()">
+        </div>
+        <div class="meta-field">
+          <label>Status</label>
+          <select class="ch-status" onchange="scheduleSave()">
+            <option value="drafting" selected="">Drafting</option>
+            <option value="revising">Revising</option>
+            <option value="complete">Complete</option>
+            <option value="outline">Outline only</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>Location / Setting</label>
+          <input class="ch-location" type="text" value="" placeholder="e.g. The Midnight Sea" oninput="scheduleSave()">
+        </div>
+        <div class="meta-field">
+          <label>Word Target</label>
+          <input class="ch-target" type="number" value="3000" min="100" oninput="scheduleSave()">
+        </div>
+      </div>
+
+      <div class="inner-tabs">
+        <div class="inner-tab active" data-tab="draft" onclick="switchInnerTab('mo1yurxxfnql','draft')">✍ Draft</div>
+        <div class="inner-tab" data-tab="ideas" onclick="switchInnerTab('mo1yurxxfnql','ideas')">💡 Ideas &amp; Concepts</div>
+        <div class="inner-tab" data-tab="metadata" onclick="switchInnerTab('mo1yurxxfnql','metadata')">🗂 Meta-Data</div>
+      </div>
+
+      <div class="inner-tab-content active" data-tab="draft">
+        <div class="writing-toolbar" data-tbfor="draft"><span class="toolbar-label">Colour:</span><button class="col-btn col-btn-revisit" data-col="revisit" onclick="setActiveColor('mo1yurxxfnql','draft','revisit')" title="Revisit &amp; polish"><span class="swatch" style="background:#c0392b"></span>Revisit &amp; polish</button><button class="col-btn col-btn-final" data-col="final" onclick="setActiveColor('mo1yurxxfnql','draft','final')" title="Final polish"><span class="swatch" style="background:#1a6b2a"></span>Final polish</button><button class="col-btn col-btn-missing" data-col="missing" onclick="setActiveColor('mo1yurxxfnql','draft','missing')" title="Missing concept"><span class="swatch" style="background:#7d4a00"></span>Missing concept</button><button class="col-btn col-btn-consistency" data-col="consistency" onclick="setActiveColor('mo1yurxxfnql','draft','consistency')" title="Check consistency"><span class="swatch" style="background:#1a3d8b"></span>Check consistency</button><button class="col-btn col-btn-placeholder" data-col="placeholder" onclick="setActiveColor('mo1yurxxfnql','draft','placeholder')" title="Placeholder scene"><span class="swatch" style="background:#5a1a7a"></span>Placeholder scene</button><button class="col-btn" style="background:var(--parchment2);border:1px solid var(--border);color:var(--ink);" onclick="applyColorToSelection('mo1yurxxfnql','draft')" title="Apply selected colour to selected text">Apply to selection</button><button class="col-btn col-btn-reset" data-col="reset" onclick="setActiveColor('mo1yurxxfnql','draft',null); applyColorToSelection('mo1yurxxfnql','draft')" title="Remove colour">✕ Remove colour</button><div class="toolbar-sep"></div><span class="toolbar-label">Insert:</span><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','🔄')" title="Revisit &amp; polish">🔄</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','✨')" title="Final polish">✨</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','❓')" title="Missing concept here">❓</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','⚠')" title="Check consistency">⚠</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','📝')" title="Placeholder scene">📝</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','✦')" title="Scene break">✦</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','※')" title="Note to self">※</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','—')" title="Em dash">—</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','…')" title="Ellipsis">…</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','draft','§')" title="Section marker">§</button></div>
+        <div class="draft-area draft-editor" data-type="draft" data-chid="mo1yurxxfnql" contenteditable="true" spellcheck="true" style="min-height:220px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;background:#fdfaf3;border:1px solid var(--border);border-radius:3px;resize:vertical;" oninput="updateWordCountFromEditor('mo1yurxxfnql','draft'); updateTimestamp('mo1yurxxfnql','draft'); scheduleSave()" onkeyup="syncEditorToState('mo1yurxxfnql','draft')" placeholder="Write your draft here…">this is a prologue</div>
+        <div class="area-footer">
+          <span class="wc-draft">4 words</span>
+          <span class="ts-draft ts">Edited 16 Apr at 22:03</span>
+        </div>
+      </div>
+
+      <div class="inner-tab-content" data-tab="ideas">
+        <div style="background:#f0eef8;border:1px solid #c8c0e8;border-radius:4px;padding:8px 12px;margin-bottom:10px;font-family:var(--font-ui);font-size:12px;color:#5a4a7a;letter-spacing:0.04em;">
+          💡 This space is for brainstorms, references, character notes, world-building ideas — anything. It will <strong>not</strong> appear in the PDF export.
+        </div>
+        <div class="writing-toolbar" data-tbfor="ideas"><span class="toolbar-label">Colour:</span><button class="col-btn col-btn-revisit" data-col="revisit" onclick="setActiveColor('mo1yurxxfnql','ideas','revisit')" title="Revisit &amp; polish"><span class="swatch" style="background:#c0392b"></span>Revisit &amp; polish</button><button class="col-btn col-btn-final" data-col="final" onclick="setActiveColor('mo1yurxxfnql','ideas','final')" title="Final polish"><span class="swatch" style="background:#1a6b2a"></span>Final polish</button><button class="col-btn col-btn-missing" data-col="missing" onclick="setActiveColor('mo1yurxxfnql','ideas','missing')" title="Missing concept"><span class="swatch" style="background:#7d4a00"></span>Missing concept</button><button class="col-btn col-btn-consistency" data-col="consistency" onclick="setActiveColor('mo1yurxxfnql','ideas','consistency')" title="Check consistency"><span class="swatch" style="background:#1a3d8b"></span>Check consistency</button><button class="col-btn col-btn-placeholder" data-col="placeholder" onclick="setActiveColor('mo1yurxxfnql','ideas','placeholder')" title="Placeholder scene"><span class="swatch" style="background:#5a1a7a"></span>Placeholder scene</button><button class="col-btn" style="background:var(--parchment2);border:1px solid var(--border);color:var(--ink);" onclick="applyColorToSelection('mo1yurxxfnql','ideas')" title="Apply selected colour to selected text">Apply to selection</button><button class="col-btn col-btn-reset" data-col="reset" onclick="setActiveColor('mo1yurxxfnql','ideas',null); applyColorToSelection('mo1yurxxfnql','ideas')" title="Remove colour">✕ Remove colour</button><div class="toolbar-sep"></div><span class="toolbar-label">Insert:</span><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','🔄')" title="Revisit &amp; polish">🔄</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','✨')" title="Final polish">✨</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','❓')" title="Missing concept here">❓</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','⚠')" title="Check consistency">⚠</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','📝')" title="Placeholder scene">📝</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','✦')" title="Scene break">✦</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','※')" title="Note to self">※</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','—')" title="Em dash">—</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','…')" title="Ellipsis">…</button><button class="sym-btn" onclick="insertSymbol('mo1yurxxfnql','ideas','§')" title="Section marker">§</button></div>
+        <div class="draft-area ideas-area draft-editor" data-type="ideas" data-chid="mo1yurxxfnql" contenteditable="true" spellcheck="true" style="min-height:180px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;background:#f3f0fb;border:1px solid var(--lavender2);border-radius:3px;" oninput="updateWordCountFromEditor('mo1yurxxfnql','ideas'); updateTimestamp('mo1yurxxfnql','ideas'); scheduleSave()" placeholder="Dump ideas, references, concept notes, research, reminders… anything goes here."></div>
+        <div class="area-footer">
+          <span class="wc-ideas">0 words</span>
+          <span class="ts-ideas ts">Nothing yet</span>
+        </div>
+      </div>
+
+      <div class="inner-tab-content" data-tab="metadata">
+        <div style="background:#f0f6ee;border:1px solid #b8ceb0;border-radius:4px;padding:8px 12px;margin-bottom:12px;font-family:var(--font-ui);font-size:12px;color:#3a5a2a;letter-spacing:0.04em;">
+          🗂 Optional planning fields. None of these appear in the PDF export — they are for your eyes only.
+        </div>
+        <label class="meta-tab-label">Beat / Stage</label><textarea class="meta-textarea ch-meta-beat" rows="2" placeholder="e.g. Inciting incident, midpoint, dark night of the soul…" oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">Plot — What Must Happen</label><textarea class="meta-textarea ch-meta-plot_what" rows="3" placeholder="The non-negotiable plot event(s) in this chapter." oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">Emotion Journey</label><textarea class="meta-textarea ch-meta-emotion" rows="3" placeholder="Where does the POV character start emotionally, and where do they end?" oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">References</label><textarea class="meta-textarea ch-meta-reference" rows="2" placeholder="Links, books, images, scenes from other works that inform this chapter." oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">Next Step — Where to Pick Up</label><textarea class="meta-textarea ch-meta-nextstep" rows="3" placeholder="When you return, start here…" oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">Author's Notes</label><textarea class="meta-textarea ch-meta-authornotes" rows="3" placeholder="Anything you want to remember about writing this chapter." oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">Glossary / Key Terms</label><textarea class="meta-textarea ch-meta-glossary" rows="2" placeholder="New words, names, concepts introduced in this chapter." oninput="scheduleSave()"></textarea>
+      </div>
+
+      <div class="chapter-actions">
+        <button class="small-btn danger" onclick="deleteChapter('mo1yurxxfnql')">🗑 Delete Chapter</button>
+      </div>
+    </div>
+  </div></div>
   </div>
 
   <!-- INDEX PANEL -->
@@ -1089,7 +1174,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     </div>
     <div class="index-book-title" id="idx-book-title">Tress</div>
     <div class="index-subtitle">A novel — chapter index</div>
-    <div id="index-content"></div>
+    <div id="index-content"><div class="index-empty">No chapters yet. Add chapters in the ✍ Chapters tab.</div></div>
   </div>
 
   <!-- PROGRESS PANEL -->
@@ -1097,7 +1182,10 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     <div class="panel-header">
       <h2>Progress &amp; Writing Log</h2>
     </div>
-    <div class="progress-summary" id="progress-summary"></div>
+    <div class="progress-summary" id="progress-summary">
+    <div class="stat-card"><div class="label">Total Words</div><div class="value">0</div><div class="sub">across all chapters</div></div>
+    <div class="stat-card"><div class="label">Chapters</div><div class="value">0</div><div class="sub">0 marked complete</div></div>
+    <div class="stat-card"><div class="label">Today</div><div class="value" style="font-size:18px;line-height:1.2;padding-top:4px">Thursday 16 April 2026</div><div class="sub">keep going ✦</div></div></div>
     <table class="progress-table">
       <thead><tr>
         <th>Chapter</th><th>Words</th><th>Target</th><th>Progress</th><th>Status</th>
@@ -1106,7 +1194,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     </table>
     <div class="session-log">
       <h3>Writing Session Log</h3>
-      <div id="session-log-list"></div>
+      <div id="session-log-list"><div class="empty-log">No sessions recorded yet. Write 50+ words in a chapter to log a session.</div></div>
     </div>
   </div>
 
@@ -1129,19 +1217,25 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     <!-- POV management -->
     <div class="tl-pov-manage">
       <div class="tl-pov-manage-title">POV Characters</div>
-      <div id="tl-pov-chips"></div>
+      <div id="tl-pov-chips"><span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;font-style:italic;">No POV characters yet — add one below.</span></div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-        <input type="text" id="tl-new-pov-name" placeholder="New POV character name…"
-          style="border:1px solid var(--border);background:var(--cream);font-family:var(--font-body);font-size:15px;padding:5px 10px;border-radius:3px;color:var(--ink);flex:1;min-width:160px;"
-          onkeydown="if(event.key==='Enter') addTlPov()">
-        <input type="color" id="tl-new-pov-color" value="#7878d8" title="Choose character colour"
-          style="width:36px;height:34px;padding:2px;border:1px solid var(--border);border-radius:3px;cursor:pointer;background:var(--cream);">
+        <input type="text" id="tl-new-pov-name" placeholder="New POV character name…" style="border:1px solid var(--border);background:var(--cream);font-family:var(--font-body);font-size:15px;padding:5px 10px;border-radius:3px;color:var(--ink);flex:1;min-width:160px;" onkeydown="if(event.key==='Enter') addTlPov()">
+        <input type="color" id="tl-new-pov-color" value="#7878d8" title="Choose character colour" style="width:36px;height:34px;padding:2px;border:1px solid var(--border);border-radius:3px;cursor:pointer;background:var(--cream);">
         <button class="small-btn" onclick="addTlPov()">+ Add POV</button>
       </div>
     </div>
 
     <!-- Timeline panes -->
-    <div id="tl-panes"></div>
+    <div id="tl-panes"><div class="tl-pane active" data-paneid="plot"><div class="tl-pane-header">
+    <div class="tl-pane-title" style="color:var(--rust)">📜 Plot Timeline</div>
+    <button class="small-btn" onclick="addTlNode('plot')">+ Add Event</button>
+  </div>
+  <div class="tl-track" id="tl-track-plot"></div>
+  <div class="tl-add-node" style="margin-top:4px">
+    <input type="text" id="tl-new-title-plot" placeholder="Event title…" onkeydown="if(event.key==='Enter') addTlNode('plot')">
+    <input type="text" id="tl-new-phase-plot" placeholder="Phase / Act (optional)" style="max-width:180px">
+    <button class="small-btn" onclick="addTlNode('plot')">+ Add</button>
+  </div></div></div>
   </div>
 
   <!-- WRITER'S TOOLS PANEL -->
@@ -1156,7 +1250,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
   </div>
 
   <!-- GITHUB SYNC PANEL -->
-  <div id="gitsync-panel" class="panel">
+  <div id="gitsync-panel" class="panel active">
     <h2>☁ Save to GitHub</h2>
     <p class="gitsync-intro">
       Enter your GitHub credentials below to push your writing directly to your repository. Your writing is saved into the HTML file itself and committed to GitHub, so every save is a versioned snapshot you can always go back to.
@@ -1189,15 +1283,15 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         <input type="text" id="gh-message" placeholder="e.g. Chapter 3 — first draft done">
       </div>
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <button class="sync-btn" onclick="doGitHubCommit()" id="sync-btn">
+        <button class="sync-btn" onclick="doGitHubCommit()" id="sync-btn" disabled="">
           <span id="sync-btn-icon">☁</span>
-          <span id="sync-btn-label">Commit &amp; Push</span>
+          <span id="sync-btn-label">Committing…</span>
         </button>
         <button class="sync-btn-txt" onclick="doExportDraftTxt()" title="Also push a plain .txt file with all chapter drafts concatenated">
           📄 Export Drafts as .txt to GitHub
         </button>
       </div>
-      <div id="sync-log"></div>
+      <div id="sync-log" class="">Preparing file content…</div>
     </div>
 
     <div class="gh-section" style="margin-top:0">
@@ -1311,6 +1405,9 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
 
 <script>
 // ─── STORAGE KEY ───────────────────────────────────────────────────────────
+// ─── BAKED STATE ──────────────────────────────────────────────
+const BAKED_STATE = {"chapters":[{"id":"mo1yurxxfnql","name":"Untitled Chapter","pov":"Tress","status":"drafting","location":"cave","target":3000,"draft":"this is a prologue","draftHtml":"this is a prologue","ideas":"","ideasHtml":"","meta_beat":"","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":"","collapsed":false,"createdAt":"2026-04-16T21:03:15.189Z"}],"sessionLog":[],"toolsData":{},"tlData":{"povs":[],"timelines":{"plot":[]}},"theme":"parchment"};
+// ─── END BAKED STATE ───────────────────────────────────────────
 const STORE_KEY = 'tress_workpad_v6';
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
@@ -2437,5 +2534,6 @@ async function doExportDraftTxt() {
 })();
 </script>
 
-</body>
-</html>
+
+
+</body></html>
