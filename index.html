@@ -1,4 +1,4 @@
-<html lang="en" data-theme=""><head>
+<html lang="en" data-theme="orange"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chronicles of Ruloba — Writing Workpad</title>
@@ -1185,14 +1185,14 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
 <!-- TOP BAR -->
 <div id="topbar">
   <div class="title">✦ <span>Chronicles of Ruloba</span> — Writing Workpad</div>
-  <span id="save-status" class="saved">Saved locally: 19 Apr 2026 09:19</span>
+  <span id="save-status" class="saved">Saved locally: 19 Apr 2026 09:28</span>
 
   <!-- Theme switcher -->
   <div id="theme-switcher" data-tip="Switch colour mode">
     <span>Mode</span>
-    <div class="theme-btn active" id="tbtn-parchment" data-theme="parchment" onclick="setTheme('parchment')" title="Parchment (light)"></div>
+    <div class="theme-btn" id="tbtn-parchment" data-theme="parchment" onclick="setTheme('parchment')" title="Parchment (light)"></div>
     <div class="theme-btn" id="tbtn-dark" data-theme="dark" onclick="setTheme('dark')" title="Dark"></div>
-    <div class="theme-btn" id="tbtn-orange" data-theme="orange" onclick="setTheme('orange')" title="Amber / Orange"></div>
+    <div class="theme-btn active" id="tbtn-orange" data-theme="orange" onclick="setTheme('orange')" title="Amber / Orange"></div>
     <div class="theme-btn" id="tbtn-bluepink" data-theme="bluepink" onclick="setTheme('bluepink')" title="Blue &amp; Pink"></div>
     <div class="theme-btn" id="tbtn-darkdraft" data-theme="darkdraft" onclick="setTheme('darkdraft')" title="Dark Draft (dark writing space)"></div>
     <div class="theme-btn" id="tbtn-midnight" data-theme="midnight" onclick="setTheme('midnight')" title="Midnight Sepia (very dark)"></div>
@@ -1377,12 +1377,12 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
       </div>
 
       <div class="inner-tabs">
-        <div class="inner-tab active" data-tab="draft" onclick="switchInnerTab('mo5hfuehxfvq','draft')">✍ Draft</div>
+        <div class="inner-tab" data-tab="draft" onclick="switchInnerTab('mo5hfuehxfvq','draft')">✍ Draft</div>
         <div class="inner-tab" data-tab="ideas" onclick="switchInnerTab('mo5hfuehxfvq','ideas')">💡 Ideas &amp; Concepts</div>
-        <div class="inner-tab" data-tab="metadata" onclick="switchInnerTab('mo5hfuehxfvq','metadata')">🗂 Meta-Data</div>
+        <div class="inner-tab active" data-tab="metadata" onclick="switchInnerTab('mo5hfuehxfvq','metadata')">🗂 Meta-Data</div>
       </div>
 
-      <div class="inner-tab-content active" data-tab="draft">
+      <div class="inner-tab-content" data-tab="draft">
         <div class="writing-toolbar" data-tbfor="draft"><span class="toolbar-label">Colour:</span><button class="col-btn col-btn-revisit" data-col="revisit" onclick="setActiveColor('mo5hfuehxfvq','draft','revisit')" title="Revisit &amp; polish"><span class="swatch" style="background:#c0392b"></span>Revisit &amp; polish</button><button class="col-btn col-btn-final" data-col="final" onclick="setActiveColor('mo5hfuehxfvq','draft','final')" title="Final polish"><span class="swatch" style="background:#1a6b2a"></span>Final polish</button><button class="col-btn col-btn-missing" data-col="missing" onclick="setActiveColor('mo5hfuehxfvq','draft','missing')" title="Missing concept"><span class="swatch" style="background:#7d4a00"></span>Missing concept</button><button class="col-btn col-btn-consistency" data-col="consistency" onclick="setActiveColor('mo5hfuehxfvq','draft','consistency')" title="Check consistency"><span class="swatch" style="background:#1a3d8b"></span>Check consistency</button><button class="col-btn col-btn-placeholder" data-col="placeholder" onclick="setActiveColor('mo5hfuehxfvq','draft','placeholder')" title="Placeholder scene"><span class="swatch" style="background:#5a1a7a"></span>Placeholder scene</button><button class="col-btn" style="background:var(--parchment2);border:1px solid var(--border);color:var(--ink);" onclick="applyColorToSelection('mo5hfuehxfvq','draft')" title="Apply selected colour to selected text">Apply to selection</button><button class="col-btn col-btn-reset" data-col="reset" onclick="setActiveColor('mo5hfuehxfvq','draft',null); applyColorToSelection('mo5hfuehxfvq','draft')" title="Remove colour">✕ Remove colour</button><div class="toolbar-sep"></div><span class="toolbar-label">Insert:</span><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','🔄')" title="Revisit &amp; polish">🔄</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','✨')" title="Final polish">✨</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','❓')" title="Missing concept here">❓</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','⚠')" title="Check consistency">⚠</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','📝')" title="Placeholder scene">📝</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','✦')" title="Scene break">✦</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','※')" title="Note to self">※</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','—')" title="Em dash">—</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','…')" title="Ellipsis">…</button><button class="sym-btn" onclick="insertSymbol('mo5hfuehxfvq','draft','§')" title="Section marker">§</button></div>
         <div class="draft-area draft-editor" data-type="draft" data-chid="mo5hfuehxfvq" contenteditable="true" spellcheck="true" style="min-height:220px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;border:1px solid var(--border);border-radius:3px;resize:vertical;" oninput="updateWordCountFromEditor('mo5hfuehxfvq','draft'); updateTimestamp('mo5hfuehxfvq','draft'); scheduleSave()" onkeyup="syncEditorToState('mo5hfuehxfvq','draft')" placeholder="Write your draft here…">🔄✨ just test</div>
         <div class="area-footer">
@@ -1403,7 +1403,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         </div>
       </div>
 
-      <div class="inner-tab-content" data-tab="metadata">
+      <div class="inner-tab-content active" data-tab="metadata">
         <div style="background:#f0f6ee;border:1px solid #b8ceb0;border-radius:4px;padding:8px 12px;margin-bottom:12px;font-family:var(--font-ui);font-size:12px;color:#3a5a2a;letter-spacing:0.04em;">
           🗂 Optional planning fields. None of these appear in the PDF export — they are for your eyes only.
         </div>
@@ -1521,7 +1521,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     </div>
     <div class="index-book-title" id="idx-book-title">Chronicles of Ruloba</div>
     <div class="index-subtitle">A novel — chapter index</div>
-    <div id="index-content"><table class="index-table"><tbody><tr onclick="showPanel('writing')" title="Go to chapter"><td class="idx-num">Chapter 1</td><td class="idx-name">test1</td><td class="idx-pov">Tress</td><td><span style="font-family:var(--font-ui);font-size:11px;color:#6a7a52;">📍 cave</span></td><td></td><td><span class="idx-status drafting">drafting</span></td><td class="idx-wc">0 w</td></tr><tr onclick="showPanel('writing')" title="Go to chapter"><td class="idx-num">Chapter 2</td><td class="idx-name">test3</td><td class="idx-pov"></td><td></td><td></td><td><span class="idx-status drafting">drafting</span></td><td class="idx-wc">3 w</td></tr><tr onclick="showPanel('writing')" title="Go to chapter"><td class="idx-num">Chapter 3</td><td class="idx-name">teat 2</td><td class="idx-pov"></td><td></td><td></td><td><span class="idx-status drafting">drafting</span></td><td class="idx-wc">0 w</td></tr></tbody></table><div style="font-family:var(--font-ui);font-size:12px;color:#9a8a70;margin-top:14px;text-align:right;letter-spacing:0.05em;">3 chapters &nbsp;·&nbsp; 3 words total</div></div>
+    <div id="index-content"><table class="index-table"><tbody><tr onclick="showPanel('writing')" title="Go to chapter"><td class="idx-num">Chapter 1</td><td class="idx-name">test1</td><td class="idx-pov">Essa</td><td><span style="font-family:var(--font-ui);font-size:11px;color:#6a7a52;">📍 cave</span></td><td><span style="display:inline-block;background:var(--lavender);border:1px solid var(--border);border-radius:8px;padding:1px 7px;font-size:10px;margin:1px 2px;color:var(--ink);">test 1</span><span style="display:inline-block;background:var(--lavender);border:1px solid var(--border);border-radius:8px;padding:1px 7px;font-size:10px;margin:1px 2px;color:var(--ink);">test2</span></td><td><span class="idx-status drafting">drafting</span></td><td class="idx-wc">8 w</td></tr><tr onclick="showPanel('writing')" title="Go to chapter"><td class="idx-num">Chapter 2</td><td class="idx-name">test3</td><td class="idx-pov"></td><td></td><td></td><td><span class="idx-status drafting">drafting</span></td><td class="idx-wc">3 w</td></tr><tr onclick="showPanel('writing')" title="Go to chapter"><td class="idx-num">Chapter 3</td><td class="idx-name">test 2</td><td class="idx-pov"></td><td></td><td></td><td><span class="idx-status drafting">drafting</span></td><td class="idx-wc">2 w</td></tr></tbody></table><div style="font-family:var(--font-ui);font-size:12px;color:#9a8a70;margin-top:14px;text-align:right;letter-spacing:0.05em;">3 chapters &nbsp;·&nbsp; 13 words total</div></div>
   </div>
 
   <!-- PROGRESS PANEL -->
@@ -1530,27 +1530,37 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
       <h2>Progress &amp; Writing Log</h2>
     </div>
     <div class="progress-summary" id="progress-summary">
-    <div class="stat-card"><div class="label">Total Words</div><div class="value">3</div><div class="sub">across all chapters</div></div>
+    <div class="stat-card"><div class="label">Total Words</div><div class="value">13</div><div class="sub">across all chapters</div></div>
     <div class="stat-card"><div class="label">Chapters</div><div class="value">3</div><div class="sub">0 marked complete</div></div>
     <div class="stat-card"><div class="label">Today</div><div class="value" style="font-size:18px;line-height:1.2;padding-top:4px">Sunday, 19 April 2026</div><div class="sub">keep going ✦</div></div></div>
     <table class="progress-table">
       <thead><tr>
         <th>Chapter</th><th>Words</th><th>Target</th><th>Progress</th><th>Status</th>
       </tr></thead>
-      <tbody id="progress-table-body"><tr><td><em>test1</em></td><td>0</td><td>3,000</td>
+      <tbody id="progress-table-body"><tr><td><em>test1</em></td><td>8</td><td>3,000</td>
       <td style="min-width:120px"><div class="pbar-wrap"><div class="pbar " style="width:0%"></div></div>
       <div style="font-size:10px;color:#9a8a70;margin-top:2px;font-family:var(--font-ui)">0%</div></td>
       <td><span style="font-family:var(--font-ui);font-size:12px;color:#6a6a8e">drafting</span></td></tr><tr><td><em>test3</em></td><td>3</td><td>3,000</td>
       <td style="min-width:120px"><div class="pbar-wrap"><div class="pbar " style="width:0%"></div></div>
       <div style="font-size:10px;color:#9a8a70;margin-top:2px;font-family:var(--font-ui)">0%</div></td>
-      <td><span style="font-family:var(--font-ui);font-size:12px;color:#6a6a8e">drafting</span></td></tr><tr><td><em>teat 2</em></td><td>0</td><td>3,000</td>
+      <td><span style="font-family:var(--font-ui);font-size:12px;color:#6a6a8e">drafting</span></td></tr><tr><td><em>test 2</em></td><td>2</td><td>3,000</td>
       <td style="min-width:120px"><div class="pbar-wrap"><div class="pbar " style="width:0%"></div></div>
       <div style="font-size:10px;color:#9a8a70;margin-top:2px;font-family:var(--font-ui)">0%</div></td>
       <td><span style="font-family:var(--font-ui);font-size:12px;color:#6a6a8e">drafting</span></td></tr></tbody>
     </table>
     <div class="session-log">
       <h3>Writing Session Log</h3>
-      <div id="session-log-list"><div class="empty-log">No sessions recorded yet. Write 50+ words in a chapter to log a session.</div></div>
+      <div id="session-log-list"><div class="session-item git-commit">
+        <span class="session-git-icon">☁</span>
+        <span class="session-date">19 Apr 2026 09:19</span>
+        <span class="session-chapter" style="color:var(--gold);font-style:normal;">GitHub commit</span>
+        <span class="session-words" style="color:var(--ink);font-style:italic;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">test 2</span>
+      </div><div class="session-item git-commit">
+        <span class="session-git-icon">☁</span>
+        <span class="session-date">19 Apr 2026 09:12</span>
+        <span class="session-chapter" style="color:var(--gold);font-style:normal;">GitHub commit</span>
+        <span class="session-words" style="color:var(--ink);font-style:italic;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">testing v3</span>
+      </div></div>
     </div>
   </div>
 
@@ -1602,7 +1612,90 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     <p class="tools-intro">
       Your private workshop. Collect inspiration, phrases, concepts, notes and raw ideas here — nothing here appears in the draft export.
     </p>
-    <div id="tools-collections"></div>
+    <div id="tools-collections"><div class="tools-collection" id="tc-inspiration">
+      <div class="tools-coll-header" onclick="toggleToolsColl('inspiration')">
+        <span style="font-size:18px">🌟</span>
+        <span class="tools-coll-title">Inspiration Materials</span>
+        <span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;flex:1;margin-left:8px;font-style:italic;">Books, films, images, people, places — anything that sparked something.</span>
+        <span class="tools-coll-toggle">▾</span>
+      </div>
+      <div class="tools-coll-body">
+        <div id="tc-entries-inspiration"><div class="tools-entry" data-entryid="mo5i6yt34lg5"><div class="tools-entry-meta">
+    <span class="tools-entry-label">test2</span>
+    <span class="tools-entry-date">19 Apr 2026</span>
+    <button class="tools-entry-del" onclick="deleteToolsEntry('inspiration','mo5i6yt34lg5')" title="Delete">✕</button>
+  </div>
+  <div class="tools-entry-editor draft-editor" contenteditable="true" spellcheck="true" data-collid="inspiration" data-entryid="mo5i6yt34lg5" style="min-height:80px;outline:none;padding:10px 12px;font-family:var(--font-body);font-size:16px;line-height:1.75;background:var(--cream);border:1px solid var(--border);border-radius:3px;resize:vertical;" oninput="scheduleSave()" placeholder="Write here…">test 2</div></div></div>
+        <div class="add-entry-row">
+          <input type="text" class="add-entry-input" id="tc-new-inspiration" placeholder="Add a new entry title (optional)…" onkeydown="if(event.key==='Enter') addToolsEntry('inspiration')">
+          <button class="small-btn" onclick="addToolsEntry('inspiration')">+ Add Entry</button>
+        </div>
+      </div></div><div class="tools-collection" id="tc-phrases">
+      <div class="tools-coll-header" onclick="toggleToolsColl('phrases')">
+        <span style="font-size:18px">✒</span>
+        <span class="tools-coll-title">Phrases &amp; Sentences</span>
+        <span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;flex:1;margin-left:8px;font-style:italic;">Lines too good to lose. Fragments waiting for a home.</span>
+        <span class="tools-coll-toggle">▾</span>
+      </div>
+      <div class="tools-coll-body">
+        <div id="tc-entries-phrases"></div>
+        <div class="add-entry-row">
+          <input type="text" class="add-entry-input" id="tc-new-phrases" placeholder="Add a new entry title (optional)…" onkeydown="if(event.key==='Enter') addToolsEntry('phrases')">
+          <button class="small-btn" onclick="addToolsEntry('phrases')">+ Add Entry</button>
+        </div>
+      </div></div><div class="tools-collection" id="tc-concepts">
+      <div class="tools-coll-header" onclick="toggleToolsColl('concepts')">
+        <span style="font-size:18px">💡</span>
+        <span class="tools-coll-title">Concepts</span>
+        <span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;flex:1;margin-left:8px;font-style:italic;">Ideas, themes, theories that inform the story.</span>
+        <span class="tools-coll-toggle">▾</span>
+      </div>
+      <div class="tools-coll-body">
+        <div id="tc-entries-concepts"></div>
+        <div class="add-entry-row">
+          <input type="text" class="add-entry-input" id="tc-new-concepts" placeholder="Add a new entry title (optional)…" onkeydown="if(event.key==='Enter') addToolsEntry('concepts')">
+          <button class="small-btn" onclick="addToolsEntry('concepts')">+ Add Entry</button>
+        </div>
+      </div></div><div class="tools-collection" id="tc-craft">
+      <div class="tools-coll-header" onclick="toggleToolsColl('craft')">
+        <span style="font-size:18px">📖</span>
+        <span class="tools-coll-title">Notes on Story Writing</span>
+        <span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;flex:1;margin-left:8px;font-style:italic;">Reminders to yourself about craft, structure, voice.</span>
+        <span class="tools-coll-toggle">▾</span>
+      </div>
+      <div class="tools-coll-body">
+        <div id="tc-entries-craft"></div>
+        <div class="add-entry-row">
+          <input type="text" class="add-entry-input" id="tc-new-craft" placeholder="Add a new entry title (optional)…" onkeydown="if(event.key==='Enter') addToolsEntry('craft')">
+          <button class="small-btn" onclick="addToolsEntry('craft')">+ Add Entry</button>
+        </div>
+      </div></div><div class="tools-collection" id="tc-homeless">
+      <div class="tools-coll-header" onclick="toggleToolsColl('homeless')">
+        <span style="font-size:18px">🏚</span>
+        <span class="tools-coll-title">Ideas With No Home</span>
+        <span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;flex:1;margin-left:8px;font-style:italic;">Things that feel right but don't belong anywhere yet.</span>
+        <span class="tools-coll-toggle">▾</span>
+      </div>
+      <div class="tools-coll-body">
+        <div id="tc-entries-homeless"></div>
+        <div class="add-entry-row">
+          <input type="text" class="add-entry-input" id="tc-new-homeless" placeholder="Add a new entry title (optional)…" onkeydown="if(event.key==='Enter') addToolsEntry('homeless')">
+          <button class="small-btn" onclick="addToolsEntry('homeless')">+ Add Entry</button>
+        </div>
+      </div></div><div class="tools-collection" id="tc-rawthoughts">
+      <div class="tools-coll-header" onclick="toggleToolsColl('rawthoughts')">
+        <span style="font-size:18px">⚡</span>
+        <span class="tools-coll-title">Random Broken Thoughts</span>
+        <span style="font-family:var(--font-ui);font-size:11px;color:#9a8a70;flex:1;margin-left:8px;font-style:italic;">Half-formed sparks. Jot them down before they vanish.</span>
+        <span class="tools-coll-toggle">▾</span>
+      </div>
+      <div class="tools-coll-body">
+        <div id="tc-entries-rawthoughts"></div>
+        <div class="add-entry-row">
+          <input type="text" class="add-entry-input" id="tc-new-rawthoughts" placeholder="Add a new entry title (optional)…" onkeydown="if(event.key==='Enter') addToolsEntry('rawthoughts')">
+          <button class="small-btn" onclick="addToolsEntry('rawthoughts')">+ Add Entry</button>
+        </div>
+      </div></div></div>
   </div>
 
   <!-- GITHUB SYNC PANEL -->
@@ -1809,7 +1902,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
 <script>
 // ─── STORAGE KEY ───────────────────────────────────────────────────────────
 // ─── BAKED STATE ──────────────────────────────────────────────
-const BAKED_STATE = {"chapters":[{"id":"mo1wca7j3swy","name":"test1","pov":"Essa","status":"drafting","location":"cave","target":3000,"draftHtml":"hwllo this is chaptert 1 test. commint 2.&nbsp;","ideasHtml":"testing idea concept","collapsed":false,"createdAt":"2026-04-16T19:52:53.167Z","tags":["test 1","test2"],"draft":"hwllo this is chaptert 1 test. commint 2. ","ideas":"testing idea concept","meta_beat":"testing beat","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""},{"id":"mo5hfuehxfvq","name":"test3","pov":"","status":"drafting","location":"","tags":[],"target":3000,"draft":"🔄✨ just test","draftHtml":"🔄✨ just test","ideas":"testing idea concept 2","ideasHtml":"testing idea concept 2","meta_beat":"","meta_plot_what":"testing plot point 1","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":"","collapsed":false,"createdAt":"2026-04-19T08:06:49.769Z"},{"id":"mo1y81n6kstt","name":"test 2","pov":"","status":"drafting","location":"","target":3000,"draftHtml":"hello 2","ideasHtml":"","collapsed":false,"createdAt":"2026-04-16T20:45:34.674Z","tags":[],"draft":"hello 2","ideas":"","meta_beat":"","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""}],"sessionLog":[{"type":"git-commit","timestamp":"2026-04-19T08:12:53.224Z","date":"2026-04-19","time":"09:12","message":"testing v3"}],"toolsData":{},"tlData":{"povs":[],"timelines":{"plot":[]}},"theme":"parchment"};
+const BAKED_STATE = {"chapters":[{"id":"mo1wca7j3swy","name":"test1","pov":"Essa","status":"drafting","location":"cave","target":3000,"draftHtml":"hwllo this is chaptert 1 test. commint 2.&nbsp;","ideasHtml":"testing idea concept","collapsed":false,"createdAt":"2026-04-16T19:52:53.167Z","tags":["test 1","test2"],"draft":"hwllo this is chaptert 1 test. commint 2. ","ideas":"testing idea concept","meta_beat":"testing beat","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""},{"id":"mo5hfuehxfvq","name":"test3","pov":"","status":"drafting","location":"","tags":[],"target":3000,"draft":"🔄✨ just test","draftHtml":"🔄✨ just test","ideas":"testing idea concept 2","ideasHtml":"testing idea concept 2","meta_beat":"","meta_plot_what":"testing plot point 1","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":"","collapsed":false,"createdAt":"2026-04-19T08:06:49.769Z"},{"id":"mo1y81n6kstt","name":"test 2","pov":"","status":"drafting","location":"","target":3000,"draftHtml":"hello 2","ideasHtml":"","collapsed":false,"createdAt":"2026-04-16T20:45:34.674Z","tags":[],"draft":"hello 2","ideas":"","meta_beat":"","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""}],"sessionLog":[{"type":"git-commit","timestamp":"2026-04-19T08:19:36.813Z","date":"2026-04-19","time":"09:19","message":"test 2"},{"type":"git-commit","timestamp":"2026-04-19T08:12:53.224Z","date":"2026-04-19","time":"09:12","message":"testing v3"}],"toolsData":{"inspiration":[{"id":"mo5i6yt34lg5","label":"test2","text":"test 2","html":"test 2","createdAt":"2026-04-19T08:27:55.191Z"}],"phrases":[],"concepts":[],"craft":[],"homeless":[],"rawthoughts":[]},"tlData":{"povs":[],"timelines":{"plot":[]}},"theme":"orange"};
 // ─── END BAKED STATE ───────────────────────────────────────────
 const STORE_KEY = 'tress_workpad_v7';
 
