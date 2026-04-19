@@ -1179,13 +1179,13 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
   white-space: nowrap; pointer-events: none; z-index: 999;
 }
 </style>
-<style type="text/css"></style></head>
+<style type="text/css"></style><style type="text/css"></style></head>
 <body>
 
 <!-- TOP BAR -->
 <div id="topbar">
   <div class="title">✦ <span>Chronicles of Ruloba</span> — Writing Workpad</div>
-  <span id="save-status" class="saved">Saved locally: 19 Apr 2026 09:12</span>
+  <span id="save-status" class="saved">Saved locally: 19 Apr 2026 09:19</span>
 
   <!-- Theme switcher -->
   <div id="theme-switcher" data-tip="Switch colour mode">
@@ -1243,7 +1243,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
       <div class="chapter-title-wrap">
         <span class="chapter-num">Chapter 1</span>
         <input class="chapter-name-input" type="text" value="test1" onclick="event.stopPropagation()" oninput="scheduleSave()" placeholder="Chapter title…">
-        <span class="chapter-wc">0 words</span>
+        <span class="chapter-wc">8 words</span>
       </div>
       <span class="chapter-toggle">▾</span>
     </div>
@@ -1257,7 +1257,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
       <div class="chapter-meta">
         <div class="meta-field">
           <label>POV Character</label>
-          <input class="ch-pov" type="text" value="Tress" placeholder="e.g. Tress" oninput="scheduleSave()">
+          <input class="ch-pov" type="text" value="Essa" placeholder="e.g. Tress" oninput="scheduleSave()">
         </div>
         <div class="meta-field">
           <label>Status</label>
@@ -1279,8 +1279,8 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         <div class="meta-field" style="min-width:200px;flex:2">
           <label>Tags <span style="font-size:9px;font-style:italic;text-transform:none;letter-spacing:0">(type &amp; press Enter or comma)</span></label>
           <div class="tags-input-wrap" id="tags-wrap-mo1wca7j3swy" onclick="this.querySelector('.tag-inline-input').focus()">
-            
-            <span class="tag-chip">test 1<button class="tag-chip-del" onclick="removeTag('mo1wca7j3swy','test 1')" title="Remove tag">✕</button></span><span class="tag-chip">test2<button class="tag-chip-del" onclick="removeTag('mo1wca7j3swy','test2')" title="Remove tag">✕</button></span><input class="tag-inline-input" type="text" placeholder="Add tags…" onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();addTag('mo1wca7j3swy',this.value);this.value='';}" onblur="if(this.value.trim()){addTag('mo1wca7j3swy',this.value);this.value='';}">
+            <span class="tag-chip">test 1<button class="tag-chip-del" onclick="removeTag('mo1wca7j3swy','test 1')" title="Remove tag">✕</button></span><span class="tag-chip">test2<button class="tag-chip-del" onclick="removeTag('mo1wca7j3swy','test2')" title="Remove tag">✕</button></span>
+            <input class="tag-inline-input" type="text" placeholder="" onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();addTag('mo1wca7j3swy',this.value);this.value='';}" onblur="if(this.value.trim()){addTag('mo1wca7j3swy',this.value);this.value='';}">
           </div>
         </div>
       </div>
@@ -1293,10 +1293,10 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
 
       <div class="inner-tab-content active" data-tab="draft">
         <div class="writing-toolbar" data-tbfor="draft"><span class="toolbar-label">Colour:</span><button class="col-btn col-btn-revisit" data-col="revisit" onclick="setActiveColor('mo1wca7j3swy','draft','revisit')" title="Revisit &amp; polish"><span class="swatch" style="background:#c0392b"></span>Revisit &amp; polish</button><button class="col-btn col-btn-final" data-col="final" onclick="setActiveColor('mo1wca7j3swy','draft','final')" title="Final polish"><span class="swatch" style="background:#1a6b2a"></span>Final polish</button><button class="col-btn col-btn-missing" data-col="missing" onclick="setActiveColor('mo1wca7j3swy','draft','missing')" title="Missing concept"><span class="swatch" style="background:#7d4a00"></span>Missing concept</button><button class="col-btn col-btn-consistency" data-col="consistency" onclick="setActiveColor('mo1wca7j3swy','draft','consistency')" title="Check consistency"><span class="swatch" style="background:#1a3d8b"></span>Check consistency</button><button class="col-btn col-btn-placeholder" data-col="placeholder" onclick="setActiveColor('mo1wca7j3swy','draft','placeholder')" title="Placeholder scene"><span class="swatch" style="background:#5a1a7a"></span>Placeholder scene</button><button class="col-btn" style="background:var(--parchment2);border:1px solid var(--border);color:var(--ink);" onclick="applyColorToSelection('mo1wca7j3swy','draft')" title="Apply selected colour to selected text">Apply to selection</button><button class="col-btn col-btn-reset" data-col="reset" onclick="setActiveColor('mo1wca7j3swy','draft',null); applyColorToSelection('mo1wca7j3swy','draft')" title="Remove colour">✕ Remove colour</button><div class="toolbar-sep"></div><span class="toolbar-label">Insert:</span><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','🔄')" title="Revisit &amp; polish">🔄</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','✨')" title="Final polish">✨</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','❓')" title="Missing concept here">❓</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','⚠')" title="Check consistency">⚠</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','📝')" title="Placeholder scene">📝</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','✦')" title="Scene break">✦</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','※')" title="Note to self">※</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','—')" title="Em dash">—</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','…')" title="Ellipsis">…</button><button class="sym-btn" onclick="insertSymbol('mo1wca7j3swy','draft','§')" title="Section marker">§</button></div>
-        <div class="draft-area draft-editor" data-type="draft" data-chid="mo1wca7j3swy" contenteditable="true" spellcheck="true" style="min-height:220px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;border:1px solid var(--border);border-radius:3px;resize:vertical;" oninput="updateWordCountFromEditor('mo1wca7j3swy','draft'); updateTimestamp('mo1wca7j3swy','draft'); scheduleSave()" onkeyup="syncEditorToState('mo1wca7j3swy','draft')" placeholder="Write your draft here…"><br></div>
+        <div class="draft-area draft-editor" data-type="draft" data-chid="mo1wca7j3swy" contenteditable="true" spellcheck="true" style="min-height:220px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;border:1px solid var(--border);border-radius:3px;resize:vertical;" oninput="updateWordCountFromEditor('mo1wca7j3swy','draft'); updateTimestamp('mo1wca7j3swy','draft'); scheduleSave()" onkeyup="syncEditorToState('mo1wca7j3swy','draft')" placeholder="Write your draft here…">hwllo this is chaptert 1 test. commint 2.&nbsp;</div>
         <div class="area-footer">
-          <span class="wc-draft">0 words</span>
-          <span class="ts-draft ts">Previously edited</span>
+          <span class="wc-draft">8 words</span>
+          <span class="ts-draft ts">Edited 19 Apr at 09:18</span>
         </div>
       </div>
 
@@ -1308,7 +1308,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         <div class="draft-area ideas-area draft-editor" data-type="ideas" data-chid="mo1wca7j3swy" contenteditable="true" spellcheck="true" style="min-height:180px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;border-radius:3px;" oninput="updateWordCountFromEditor('mo1wca7j3swy','ideas'); updateTimestamp('mo1wca7j3swy','ideas'); scheduleSave()" placeholder="Dump ideas, references, concept notes, research, reminders… anything goes here.">testing idea concept</div>
         <div class="area-footer">
           <span class="wc-ideas">3 words</span>
-          <span class="ts-ideas ts">Edited 19 Apr at 09:08</span>
+          <span class="ts-ideas ts">Previously edited</span>
         </div>
       </div>
 
@@ -1316,7 +1316,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         <div style="background:#f0f6ee;border:1px solid #b8ceb0;border-radius:4px;padding:8px 12px;margin-bottom:12px;font-family:var(--font-ui);font-size:12px;color:#3a5a2a;letter-spacing:0.04em;">
           🗂 Optional planning fields. None of these appear in the PDF export — they are for your eyes only.
         </div>
-        <label class="meta-tab-label">Beat / Stage</label><textarea class="meta-textarea ch-meta-beat" rows="2" placeholder="e.g. Inciting incident, midpoint, dark night of the soul…" oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">Beat / Stage</label><textarea class="meta-textarea ch-meta-beat" rows="2" placeholder="e.g. Inciting incident, midpoint, dark night of the soul…" oninput="scheduleSave()">testing beat</textarea>
         <label class="meta-tab-label">Plot — What Must Happen</label><textarea class="meta-textarea ch-meta-plot_what" rows="3" placeholder="The non-negotiable plot event(s) in this chapter." oninput="scheduleSave()"></textarea>
         <label class="meta-tab-label">Emotion Journey</label><textarea class="meta-textarea ch-meta-emotion" rows="3" placeholder="Where does the POV character start emotionally, and where do they end?" oninput="scheduleSave()"></textarea>
         <label class="meta-tab-label">References</label><textarea class="meta-textarea ch-meta-reference" rows="2" placeholder="Links, books, images, scenes from other works that inform this chapter." oninput="scheduleSave()"></textarea>
@@ -1333,7 +1333,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     <div class="chapter-header" onclick="toggleChapter('mo5hfuehxfvq')">
       <div class="chapter-title-wrap">
         <span class="chapter-num">Chapter 2</span>
-        <input class="chapter-name-input" type="text" value="Untitled Chapter" onclick="event.stopPropagation()" oninput="scheduleSave()" placeholder="Chapter title…">
+        <input class="chapter-name-input" type="text" value="test3" onclick="event.stopPropagation()" oninput="scheduleSave()" placeholder="Chapter title…">
         <span class="chapter-wc">3 words</span>
       </div>
       <span class="chapter-toggle">▾</span>
@@ -1387,7 +1387,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         <div class="draft-area draft-editor" data-type="draft" data-chid="mo5hfuehxfvq" contenteditable="true" spellcheck="true" style="min-height:220px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;border:1px solid var(--border);border-radius:3px;resize:vertical;" oninput="updateWordCountFromEditor('mo5hfuehxfvq','draft'); updateTimestamp('mo5hfuehxfvq','draft'); scheduleSave()" onkeyup="syncEditorToState('mo5hfuehxfvq','draft')" placeholder="Write your draft here…">🔄✨ just test</div>
         <div class="area-footer">
           <span class="wc-draft">3 words</span>
-          <span class="ts-draft ts">Edited 19 Apr at 09:07</span>
+          <span class="ts-draft ts">Previously edited</span>
         </div>
       </div>
 
@@ -1399,7 +1399,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         <div class="draft-area ideas-area draft-editor" data-type="ideas" data-chid="mo5hfuehxfvq" contenteditable="true" spellcheck="true" style="min-height:180px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;border-radius:3px;" oninput="updateWordCountFromEditor('mo5hfuehxfvq','ideas'); updateTimestamp('mo5hfuehxfvq','ideas'); scheduleSave()" placeholder="Dump ideas, references, concept notes, research, reminders… anything goes here.">testing idea concept 2</div>
         <div class="area-footer">
           <span class="wc-ideas">4 words</span>
-          <span class="ts-ideas ts">Edited 19 Apr at 09:08</span>
+          <span class="ts-ideas ts">Previously edited</span>
         </div>
       </div>
 
@@ -1408,7 +1408,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
           🗂 Optional planning fields. None of these appear in the PDF export — they are for your eyes only.
         </div>
         <label class="meta-tab-label">Beat / Stage</label><textarea class="meta-textarea ch-meta-beat" rows="2" placeholder="e.g. Inciting incident, midpoint, dark night of the soul…" oninput="scheduleSave()"></textarea>
-        <label class="meta-tab-label">Plot — What Must Happen</label><textarea class="meta-textarea ch-meta-plot_what" rows="3" placeholder="The non-negotiable plot event(s) in this chapter." oninput="scheduleSave()"></textarea>
+        <label class="meta-tab-label">Plot — What Must Happen</label><textarea class="meta-textarea ch-meta-plot_what" rows="3" placeholder="The non-negotiable plot event(s) in this chapter." oninput="scheduleSave()">testing plot point 1</textarea>
         <label class="meta-tab-label">Emotion Journey</label><textarea class="meta-textarea ch-meta-emotion" rows="3" placeholder="Where does the POV character start emotionally, and where do they end?" oninput="scheduleSave()"></textarea>
         <label class="meta-tab-label">References</label><textarea class="meta-textarea ch-meta-reference" rows="2" placeholder="Links, books, images, scenes from other works that inform this chapter." oninput="scheduleSave()"></textarea>
         <label class="meta-tab-label">Next Step — Where to Pick Up</label><textarea class="meta-textarea ch-meta-nextstep" rows="3" placeholder="When you return, start here…" oninput="scheduleSave()"></textarea>
@@ -1424,7 +1424,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
     <div class="chapter-header" onclick="toggleChapter('mo1y81n6kstt')">
       <div class="chapter-title-wrap">
         <span class="chapter-num">Chapter 3</span>
-        <input class="chapter-name-input" type="text" value="teat 2" onclick="event.stopPropagation()" oninput="scheduleSave()" placeholder="Chapter title…">
+        <input class="chapter-name-input" type="text" value="test 2" onclick="event.stopPropagation()" oninput="scheduleSave()" placeholder="Chapter title…">
         <span class="chapter-wc">2 words</span>
       </div>
       <span class="chapter-toggle">▾</span>
@@ -1478,7 +1478,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
         <div class="draft-area draft-editor" data-type="draft" data-chid="mo1y81n6kstt" contenteditable="true" spellcheck="true" style="min-height:220px;outline:none;padding:14px 16px;font-family:var(--font-body);font-size:17px;line-height:1.85;border:1px solid var(--border);border-radius:3px;resize:vertical;" oninput="updateWordCountFromEditor('mo1y81n6kstt','draft'); updateTimestamp('mo1y81n6kstt','draft'); scheduleSave()" onkeyup="syncEditorToState('mo1y81n6kstt','draft')" placeholder="Write your draft here…">hello 2</div>
         <div class="area-footer">
           <span class="wc-draft">2 words</span>
-          <span class="ts-draft ts">Edited 19 Apr at 09:10</span>
+          <span class="ts-draft ts">Previously edited</span>
         </div>
       </div>
 
@@ -1809,7 +1809,7 @@ html[data-theme="dark"] .tl-add-node input { background: #16151c; color: #d0c8b8
 <script>
 // ─── STORAGE KEY ───────────────────────────────────────────────────────────
 // ─── BAKED STATE ──────────────────────────────────────────────
-const BAKED_STATE = {"chapters":[{"id":"mo1wca7j3swy","name":"test1","pov":"Essa","status":"drafting","location":"cave","target":3000,"draftHtml":"<br>","ideasHtml":"testing idea concept","collapsed":false,"createdAt":"2026-04-16T19:52:53.167Z","tags":["test 1","test2"],"draft":"","ideas":"testing idea concept","meta_beat":"testing beat","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""},{"id":"mo5hfuehxfvq","name":"test3","pov":"","status":"drafting","location":"","tags":[],"target":3000,"draft":"🔄✨ just test","draftHtml":"🔄✨ just test","ideas":"testing idea concept 2","ideasHtml":"testing idea concept 2","meta_beat":"","meta_plot_what":"testing plot point 1","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":"","collapsed":false,"createdAt":"2026-04-19T08:06:49.769Z"},{"id":"mo1y81n6kstt","name":"test 2","pov":"","status":"drafting","location":"","target":3000,"draftHtml":"hello 2","ideasHtml":"","collapsed":false,"createdAt":"2026-04-16T20:45:34.674Z","tags":[],"draft":"hello 2","ideas":"","meta_beat":"","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""}],"sessionLog":[],"toolsData":{},"tlData":{"povs":[],"timelines":{"plot":[]}},"theme":"parchment"};
+const BAKED_STATE = {"chapters":[{"id":"mo1wca7j3swy","name":"test1","pov":"Essa","status":"drafting","location":"cave","target":3000,"draftHtml":"hwllo this is chaptert 1 test. commint 2.&nbsp;","ideasHtml":"testing idea concept","collapsed":false,"createdAt":"2026-04-16T19:52:53.167Z","tags":["test 1","test2"],"draft":"hwllo this is chaptert 1 test. commint 2. ","ideas":"testing idea concept","meta_beat":"testing beat","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""},{"id":"mo5hfuehxfvq","name":"test3","pov":"","status":"drafting","location":"","tags":[],"target":3000,"draft":"🔄✨ just test","draftHtml":"🔄✨ just test","ideas":"testing idea concept 2","ideasHtml":"testing idea concept 2","meta_beat":"","meta_plot_what":"testing plot point 1","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":"","collapsed":false,"createdAt":"2026-04-19T08:06:49.769Z"},{"id":"mo1y81n6kstt","name":"test 2","pov":"","status":"drafting","location":"","target":3000,"draftHtml":"hello 2","ideasHtml":"","collapsed":false,"createdAt":"2026-04-16T20:45:34.674Z","tags":[],"draft":"hello 2","ideas":"","meta_beat":"","meta_plot_what":"","meta_emotion":"","meta_reference":"","meta_nextstep":"","meta_authornotes":"","meta_glossary":""}],"sessionLog":[{"type":"git-commit","timestamp":"2026-04-19T08:12:53.224Z","date":"2026-04-19","time":"09:12","message":"testing v3"}],"toolsData":{},"tlData":{"povs":[],"timelines":{"plot":[]}},"theme":"parchment"};
 // ─── END BAKED STATE ───────────────────────────────────────────
 const STORE_KEY = 'tress_workpad_v7';
 
